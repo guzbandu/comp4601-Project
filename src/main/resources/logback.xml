@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Sahaj Arora 100961220 Jennifer Franklin 100315764 -->
+<!-- Sahaj Arora 100961220 Luke Daschko 100796007 Jennifer Franklin 100315764 -->
 <configuration>
 
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
