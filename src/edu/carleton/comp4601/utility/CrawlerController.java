@@ -42,7 +42,7 @@ public class CrawlerController {
 			ratios.put(skill, (double)counts.get(skill)/(double)counts.get(searchTerm));
 		}
 		//Find the top 10 ratios
-		Map<String, Double> sortedRatios = sortByComparator(ratios, false);
+		Map<String, Double> sortedRatios = sortByComparator(ratios);
 		int i=0;
 		for(String skill : sortedRatios.keySet()) {
 			results.put(skill, sortedRatios.get(skill));
@@ -54,7 +54,7 @@ public class CrawlerController {
 		return results;
 	}
 
-	private static Map<String, Double> sortByComparator(Map<String, Double> unsortMap, final boolean order) {
+	private static Map<String, Double> sortByComparator(Map<String, Double> unsortMap) {
 
 		List<Entry<String, Double>> list = new LinkedList<Entry<String, Double>>(unsortMap.entrySet());
 
@@ -62,12 +62,7 @@ public class CrawlerController {
 		Collections.sort(list, new Comparator<Entry<String, Double>>() {
 			public int compare(Entry<String, Double> o1,
 					Entry<String, Double> o2) {
-				if (order) {
-					return o1.getValue().compareTo(o2.getValue());
-				}
-				else {
-					return o2.getValue().compareTo(o1.getValue());
-				}
+				return o2.getValue().compareTo(o1.getValue());
 			}
 		});
 
