@@ -139,7 +139,8 @@ public class MyCrawler extends WebCrawler {
 					}
 				} catch (Exception e) {
 					System.out.println("job link: " + jobLink + " url: " + url);
-					e.printStackTrace();
+					System.out.println("Unable to reach url");
+					//e.printStackTrace();
 				}				
           	}
           	 
