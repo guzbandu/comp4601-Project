@@ -74,7 +74,6 @@ public class CrawlerController {
 
 		return sortedMap;
 	}
-
 	
 	private void createPages() {
 		Pages.getInstance().addPage("/jobsearch/job/18058641?uc=E6&amp;sc=4.4176&amp;sp=1", "Toronto, Ontario");
