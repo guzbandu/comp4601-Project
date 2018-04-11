@@ -61,7 +61,7 @@ public class MyCrawler extends WebCrawler {
      @Override
      public void visit(Page page) {
          String url = page.getWebURL().getURL();
-         System.out.println("URL: " + url);
+         //System.out.println("URL: " + url);
 
          if (page.getParseData() instanceof HtmlParseData) {
              HtmlParseData htmlParseData = (HtmlParseData) page.getParseData();
@@ -90,9 +90,10 @@ public class MyCrawler extends WebCrawler {
 				
 				try {
 					//Connect
-					System.out.println();
-					System.out.println("job link: " + jobLink + " url: " + url);
-					System.out.println(count);
+					//System.out.println();
+					//System.out.println("job link: " + jobLink + " url: " + url);
+					//System.out.println(count);
+					
 					Document jobPage = Jsoup.connect(jobLink).get();
 					//--get location:
 					
@@ -100,14 +101,39 @@ public class MyCrawler extends WebCrawler {
 					//--Add Page
 					Pages pages = Pages.getInstance();
 					pages.addPage(jobLink, "");
+					
+					String pattern = "https://www.workopolis.com/jobsearch/(.*)-jobs/.*";
+					Pattern r = Pattern.compile(pattern);
+					Matcher m = r.matcher(url);
+					String searchSkill = "";
+					if(m.find()) {
+						//System.out.println("match"+m.group(1));
+						searchSkill = m.group(1);
+					}
+					if(!searchSkill.equals(""))
+						Pages.getInstance().addSkill(jobLink, searchSkill);
+					else {
+						pattern = "https://www.workopolis.com/jobsearch/find-jobs\\?st=RELEVANCE\\&ak=(.*)\\&l=canada&pn=1";
+						r = Pattern.compile(pattern);
+						m = r.matcher(url);
+						searchSkill = "";
+						if(m.find()) {
+							//System.out.println("match"+m.group(1));
+							searchSkill = m.group(1);
+						}
+						if(!searchSkill.equals(""))
+							Pages.getInstance().addSkill(jobLink, searchSkill);
+						else
+							System.out.println("Java did not match!!:"+url);
+					}
 					count++;
 					HashMap<String, Boolean> skills = pages.getSkills(jobLink);
 					
 					//--look for each skill in page and make a note if it exists
-					String jobExpression = jobPage.html().toString().replace("\n", "");
+					String jobExpression = jobPage.html().toString().replace("\n", " ").replace(",", " ").replace(".", " ").replaceAll(";", " ");
 					for(String skill: skills.keySet()){
-						if(jobExpression.indexOf(" " + skill + " ") != -1){
-							System.out.println("we gotta skill boy: " + skill);
+						if(jobExpression.toLowerCase().indexOf(" " + skill + " ") != -1){
+							//System.out.println("we gotta skill boy: " + skill);
 							Pages.getInstance().addSkill(jobLink, skill);
 						}
 					}

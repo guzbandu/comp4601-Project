@@ -1,22 +1,18 @@
 package edu.carleton.comp4601.utility;
 
-import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
 
 import edu.carleton.comp4601.dao.Skills;
-import edu.carleton.comp4601.model.PageSummary;
 import edu.carleton.comp4601.model.Pages;
 import edu.uci.ics.crawler4j.crawler.CrawlConfig;
 import edu.uci.ics.crawler4j.crawler.CrawlController;
@@ -31,6 +27,9 @@ public class CrawlerController {
 		for(String skill : results.keySet()) {
 			System.out.println("Skill: "+skill+" Percent:"+results.get(skill)*100);
 		}
+		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+		Date date = new Date();
+		System.out.println(dateFormat.format(date));
 	}
 	
 	private Map<String, Double> getResults(String searchTerm) {
