@@ -91,7 +91,7 @@ public class CrawlerController {
 	//Decr: starts the craw
 	//Input: the keyword you want to search into each job website
 	private void crawl(String searchword) throws Exception{
-		String crawlStorageFolder = "/data/crawl/root";
+		String crawlStorageFolder = System.getProperty("user.home")+"/.project/";
         int numberOfCrawlers = 7;
 
         CrawlConfig config = new CrawlConfig();
