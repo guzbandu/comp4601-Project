@@ -1,5 +1,6 @@
 package edu.carleton.comp4601.utility;
 
+import java.io.IOException;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -8,9 +9,20 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 
 import edu.carleton.comp4601.dao.Skills;
+import edu.carleton.comp4601.model.PageSummary;
 import edu.carleton.comp4601.model.Pages;
+import edu.uci.ics.crawler4j.crawler.CrawlConfig;
+import edu.uci.ics.crawler4j.crawler.CrawlController;
+import edu.uci.ics.crawler4j.fetcher.PageFetcher;
+import edu.uci.ics.crawler4j.robotstxt.RobotstxtConfig;
+import edu.uci.ics.crawler4j.robotstxt.RobotstxtServer;
 
 public class CrawlerController {
 	public CrawlerController() {
@@ -22,6 +34,7 @@ public class CrawlerController {
 	}
 	
 	private Map<String, Double> getResults(String searchTerm) {
+		System.out.println("getResults");
 		Map<String, Double> results = new LinkedHashMap<String, Double>();
 		Map<String, Double> ratios = new LinkedHashMap<String, Double>();
 		Map<String, Integer> counts = new HashMap<String, Integer>();
@@ -75,86 +88,45 @@ public class CrawlerController {
 		return sortedMap;
 	}
 	
-	private void createPages() {
-		Pages.getInstance().addPage("/jobsearch/job/18058641?uc=E6&amp;sc=4.4176&amp;sp=1", "Toronto, Ontario");
-		Pages.getInstance().addPage("/jobsearch/job/18051436?uc=E2&amp;sc=2.8286&amp;sp=2", "Mississauga, Ontario");
-		Pages.getInstance().addPage("/jobsearch/job/17731346?uc=E12&amp;sc=5.4716&amp;sp=1", "Toronto, Ontario");
-		Pages.getInstance().addPage("/jobsearch/job/17915328?uc=E12&amp;sc=5.3884&amp;sp=3", "Toronto, Ontario");
-		Pages.getInstance().addPage("/jobsearch/job/17836867?uc=E8&amp;sc=5.3567&amp;sp=4", "Toronto, Ontario");
-		Pages.getInstance().addPage("/jobsearch/job/18022161?uc=E14&amp;sc=5.3283&amp;sp=5", "Toronto, Ontario");
-		Pages.getInstance().addPage("/jobsearch/job/18055767?uc=E12&amp;sc=5.3226&amp;sp=6", "Mississauga, Ontario");
-		Pages.getInstance().addSkill("/jobsearch/job/18058641?uc=E6&amp;sc=4.4176&amp;sp=1", "angularjs");
-		Pages.getInstance().addSkill("/jobsearch/job/18058641?uc=E6&amp;sc=4.4176&amp;sp=1", "java");
-		Pages.getInstance().addSkill("/jobsearch/job/18058641?uc=E6&amp;sc=4.4176&amp;sp=1", "restful");
-		Pages.getInstance().addSkill("/jobsearch/job/18058641?uc=E6&amp;sc=4.4176&amp;sp=1", "unix");
-		Pages.getInstance().addSkill("/jobsearch/job/18058641?uc=E6&amp;sc=4.4176&amp;sp=1", "linux");
-		Pages.getInstance().addSkill("/jobsearch/job/18058641?uc=E6&amp;sc=4.4176&amp;sp=1", "sql");
-		Pages.getInstance().addSkill("/jobsearch/job/18058641?uc=E6&amp;sc=4.4176&amp;sp=1", "oracle");
-		Pages.getInstance().addSkill("/jobsearch/job/18058641?uc=E6&amp;sc=4.4176&amp;sp=1", "pl-sql");
-		Pages.getInstance().addSkill("/jobsearch/job/18058641?uc=E6&amp;sc=4.4176&amp;sp=1", "agile");
-		Pages.getInstance().addSkill("/jobsearch/job/18058641?uc=E6&amp;sc=4.4176&amp;sp=1", "git");
-		Pages.getInstance().addSkill("/jobsearch/job/18058641?uc=E6&amp;sc=4.4176&amp;sp=1", "jenkins");
-		Pages.getInstance().addSkill("/jobsearch/job/18058641?uc=E6&amp;sc=4.4176&amp;sp=1", "oracle");
-		Pages.getInstance().addSkill("/jobsearch/job/18058641?uc=E6&amp;sc=4.4176&amp;sp=1", "subversion");
-		Pages.getInstance().addSkill("/jobsearch/job/18058641?uc=E6&amp;sc=4.4176&amp;sp=1", "jira");
-		Pages.getInstance().addSkill("/jobsearch/job/18058641?uc=E6&amp;sc=4.4176&amp;sp=1", "confluence");
-		Pages.getInstance().addSkill("/jobsearch/job/18051436?uc=E2&amp;sc=2.8286&amp;sp=2", "java");
-		Pages.getInstance().addSkill("/jobsearch/job/18051436?uc=E2&amp;sc=2.8286&amp;sp=2", "html5");
-		Pages.getInstance().addSkill("/jobsearch/job/18051436?uc=E2&amp;sc=2.8286&amp;sp=2", "css3");
-		Pages.getInstance().addSkill("/jobsearch/job/18051436?uc=E2&amp;sc=2.8286&amp;sp=2", "javascript");
-		Pages.getInstance().addSkill("/jobsearch/job/18051436?uc=E2&amp;sc=2.8286&amp;sp=2", "angularjs");
-		Pages.getInstance().addSkill("/jobsearch/job/18051436?uc=E2&amp;sc=2.8286&amp;sp=2", "sql server");
-		Pages.getInstance().addSkill("/jobsearch/job/18051436?uc=E2&amp;sc=2.8286&amp;sp=2", "oracle");
-		Pages.getInstance().addSkill("/jobsearch/job/17731346?uc=E12&amp;sc=5.4716&amp;sp=1", "java");
-		Pages.getInstance().addSkill("/jobsearch/job/17731346?uc=E12&amp;sc=5.4716&amp;sp=1", "j2ee");
-		Pages.getInstance().addSkill("/jobsearch/job/17731346?uc=E12&amp;sc=5.4716&amp;sp=1", "servlets");
-		Pages.getInstance().addSkill("/jobsearch/job/17731346?uc=E12&amp;sc=5.4716&amp;sp=1", "jsp");
-		Pages.getInstance().addSkill("/jobsearch/job/17731346?uc=E12&amp;sc=5.4716&amp;sp=1", "jdbc");
-		Pages.getInstance().addSkill("/jobsearch/job/17731346?uc=E12&amp;sc=5.4716&amp;sp=1", "ejb");
-		Pages.getInstance().addSkill("/jobsearch/job/17731346?uc=E12&amp;sc=5.4716&amp;sp=1", "jms");
-		Pages.getInstance().addSkill("/jobsearch/job/17915328?uc=E12&amp;sc=5.3884&amp;sp=3", "java");
-		Pages.getInstance().addSkill("/jobsearch/job/17915328?uc=E12&amp;sc=5.3884&amp;sp=3", "jquery");
-		Pages.getInstance().addSkill("/jobsearch/job/17915328?uc=E12&amp;sc=5.3884&amp;sp=3", "spring");
-		Pages.getInstance().addSkill("/jobsearch/job/17915328?uc=E12&amp;sc=5.3884&amp;sp=3", "html");
-		Pages.getInstance().addSkill("/jobsearch/job/17915328?uc=E12&amp;sc=5.3884&amp;sp=3", "css");
-		Pages.getInstance().addSkill("/jobsearch/job/17915328?uc=E12&amp;sc=5.3884&amp;sp=3", "agile");
-		Pages.getInstance().addSkill("/jobsearch/job/17836867?uc=E8&amp;sc=5.3567&amp;sp=4", "java");
-		Pages.getInstance().addSkill("/jobsearch/job/17836867?uc=E8&amp;sc=5.3567&amp;sp=4", "jee");
-		Pages.getInstance().addSkill("/jobsearch/job/17836867?uc=E8&amp;sc=5.3567&amp;sp=4", "jms");
-		Pages.getInstance().addSkill("/jobsearch/job/17836867?uc=E8&amp;sc=5.3567&amp;sp=4", "jsp");
-		Pages.getInstance().addSkill("/jobsearch/job/17836867?uc=E8&amp;sc=5.3567&amp;sp=4", "jsf");
-		Pages.getInstance().addSkill("/jobsearch/job/17836867?uc=E8&amp;sc=5.3567&amp;sp=4", "sql");
-		Pages.getInstance().addSkill("/jobsearch/job/17836867?uc=E8&amp;sc=5.3567&amp;sp=4", "xml");
-		Pages.getInstance().addSkill("/jobsearch/job/17836867?uc=E8&amp;sc=5.3567&amp;sp=4", "html");
-		Pages.getInstance().addSkill("/jobsearch/job/17836867?uc=E8&amp;sc=5.3567&amp;sp=4", "hibernate");
-		Pages.getInstance().addSkill("/jobsearch/job/17836867?uc=E8&amp;sc=5.3567&amp;sp=4", "ejb");
-		Pages.getInstance().addSkill("/jobsearch/job/17836867?uc=E8&amp;sc=5.3567&amp;sp=4", "ejb");
-		Pages.getInstance().addSkill("/jobsearch/job/17836867?uc=E8&amp;sc=5.3567&amp;sp=4", "ejb");
-		Pages.getInstance().addSkill("/jobsearch/job/17836867?uc=E8&amp;sc=5.3567&amp;sp=4", "agile");
-		Pages.getInstance().addSkill("/jobsearch/job/17836867?uc=E8&amp;sc=5.3567&amp;sp=4", "jboss");
-		Pages.getInstance().addSkill("/jobsearch/job/17836867?uc=E8&amp;sc=5.3567&amp;sp=4", "junit");
-		Pages.getInstance().addSkill("/jobsearch/job/18022161?uc=E14&amp;sc=5.3283&amp;sp=5", "java");
-		Pages.getInstance().addSkill("/jobsearch/job/18022161?uc=E14&amp;sc=5.3283&amp;sp=5", "jee");
-		Pages.getInstance().addSkill("/jobsearch/job/18022161?uc=E14&amp;sc=5.3283&amp;sp=5", "spring");
-		Pages.getInstance().addSkill("/jobsearch/job/18022161?uc=E14&amp;sc=5.3283&amp;sp=5", "javascript");
-		Pages.getInstance().addSkill("/jobsearch/job/18022161?uc=E14&amp;sc=5.3283&amp;sp=5", "junit");
-		Pages.getInstance().addSkill("/jobsearch/job/18022161?uc=E14&amp;sc=5.3283&amp;sp=5", "angular js");
-		Pages.getInstance().addSkill("/jobsearch/job/18022161?uc=E14&amp;sc=5.3283&amp;sp=5", "sql");
-		Pages.getInstance().addSkill("/jobsearch/job/18022161?uc=E14&amp;sc=5.3283&amp;sp=5", "jms");
-		Pages.getInstance().addSkill("/jobsearch/job/18022161?uc=E14&amp;sc=5.3283&amp;sp=5", "git");
-		Pages.getInstance().addSkill("/jobsearch/job/18022161?uc=E14&amp;sc=5.3283&amp;sp=5", "maven");
-		Pages.getInstance().addSkill("/jobsearch/job/18022161?uc=E14&amp;sc=5.3283&amp;sp=5", "jenkins");
-		Pages.getInstance().addSkill("/jobsearch/job/18055767?uc=E12&amp;sc=5.3226&amp;sp=6", "java");
-		Pages.getInstance().addSkill("/jobsearch/job/18055767?uc=E12&amp;sc=5.3226&amp;sp=6", "node");
-		Pages.getInstance().addSkill("/jobsearch/job/18055767?uc=E12&amp;sc=5.3226&amp;sp=6", "j2ee");
-		Pages.getInstance().addSkill("/jobsearch/job/18055767?uc=E12&amp;sc=5.3226&amp;sp=6", "rest");
-		Pages.getInstance().addSkill("/jobsearch/job/18055767?uc=E12&amp;sc=5.3226&amp;sp=6", "wsdl");
-		Pages.getInstance().addSkill("/jobsearch/job/18055767?uc=E12&amp;sc=5.3226&amp;sp=6", "xml");
-		Pages.getInstance().addSkill("/jobsearch/job/18055767?uc=E12&amp;sc=5.3226&amp;sp=6", "soap");
-		Pages.getInstance().addSkill("/jobsearch/job/18055767?uc=E12&amp;sc=5.3226&amp;sp=6", "xsd");
+	//Decr: starts the craw
+	//Input: the keyword you want to search into each job website
+	private void crawl(String searchword) throws Exception{
+		String crawlStorageFolder = "/data/crawl/root";
+        int numberOfCrawlers = 7;
+
+        CrawlConfig config = new CrawlConfig();
+        config.setCrawlStorageFolder(crawlStorageFolder);
+        config.setPolitenessDelay(100);
+
+       
+        PageFetcher pageFetcher = new PageFetcher(config);
+        RobotstxtConfig robotstxtConfig = new RobotstxtConfig();
+        RobotstxtServer robotstxtServer = new RobotstxtServer(robotstxtConfig, pageFetcher);
+        CrawlController controller = new CrawlController(config, pageFetcher, robotstxtServer);
+        
+        
+        controller.addSeed("https://www.workopolis.com/jobsearch/find-jobs?&st=RELEVANCE&ak=" + searchword + "&l=canada&&pn=1");
+
+        
+        controller.start(MyCrawler.class, numberOfCrawlers);
 	}
 	
+	
+	private void createPages() {
+		System.out.println("createPage");
+		//Step One: crawl to get the links of all the jobs pages
+		try {
+			crawl("java");
+		} catch (Exception e) {e.printStackTrace();}
+		
+		
+		//Step Two: Parse each job site with JSoup
+		
+	}
+	
+	
 	public static void main(String[] args) {
+		System.out.println("LETS GO");
 		CrawlerController cc = new CrawlerController();
 	}
 }
