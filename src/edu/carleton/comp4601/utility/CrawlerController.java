@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import edu.carleton.comp4601.dao.Equivalencies;
 import edu.carleton.comp4601.dao.Skills;
 import edu.carleton.comp4601.model.Pages;
 import edu.uci.ics.crawler4j.crawler.CrawlConfig;
@@ -48,6 +49,13 @@ public class CrawlerController {
 					counts.put(skill, counts.get(skill)+1);
 				}
 			}
+		}
+		
+		//Deal with equivalencies
+		HashMap<String, String> equivalencies = Equivalencies.getInstance().getEquivalencies();
+		for(String skill1 : equivalencies.keySet()) {
+			counts.put(skill1, counts.get(skill1)+counts.get(equivalencies.get(skill1)));
+			counts.remove(equivalencies.get(skill1));
 		}
 		
 		for(String skill : counts.keySet()) {
@@ -103,9 +111,7 @@ public class CrawlerController {
         RobotstxtServer robotstxtServer = new RobotstxtServer(robotstxtConfig, pageFetcher);
         CrawlController controller = new CrawlController(config, pageFetcher, robotstxtServer);
         
-        
         controller.addSeed("https://www.workopolis.com/jobsearch/find-jobs?&st=RELEVANCE&ak=" + searchword + "&l=canada&&pn=1");
-
         
         controller.start(MyCrawler.class, numberOfCrawlers);
 	}

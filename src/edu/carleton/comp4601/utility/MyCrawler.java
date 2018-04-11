@@ -137,11 +137,10 @@ public class MyCrawler extends WebCrawler {
 							Pages.getInstance().addSkill(jobLink, skill);
 						}
 					}
-				} catch (IOException e) {e.printStackTrace();}
-				
-				
-				
-				
+				} catch (Exception e) {
+					System.out.println("job link: " + jobLink + " url: " + url);
+					e.printStackTrace();
+				}				
           	}
           	 
          }
