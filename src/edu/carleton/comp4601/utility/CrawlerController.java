@@ -23,17 +23,17 @@ import edu.uci.ics.crawler4j.robotstxt.RobotstxtServer;
 
 public class CrawlerController {
 	public CrawlerController() {
-		Map<String, Double> results = getResults("java"); //TODO this is a stub until the actual crawling gets done
-		System.out.println("The top ten skills are:");
-		for(String skill : results.keySet()) {
-			System.out.println("Skill: "+skill+" Percent:"+results.get(skill)*100);
-		}
-		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-		Date date = new Date();
-		System.out.println(dateFormat.format(date));
+		//Map<String, Double> results = getResults("java"); //TODO this is a stub until the actual crawling gets done
+		//System.out.println("The top ten skills are:");
+		//for(String skill : results.keySet()) {
+			//System.out.println("Skill: "+skill+" Percent:"+results.get(skill)*100);
+		//}
+		//DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+		//Date date = new Date();
+		//System.out.println(dateFormat.format(date));
 	}
 	
-	private Map<String, Double> getResults(String searchTerm) {
+	public Map<String, Double> getResults(String searchTerm) {
 		System.out.println("getResults");
 		Map<String, Double> results = new LinkedHashMap<String, Double>();
 		Map<String, Double> ratios = new LinkedHashMap<String, Double>();
@@ -133,5 +133,13 @@ public class CrawlerController {
 	public static void main(String[] args) {
 		System.out.println("LETS GO");
 		CrawlerController cc = new CrawlerController();
+		Map<String, Double> results = cc.getResults("java"); //TODO this is a stub until the actual crawling gets done
+		System.out.println("The top ten skills are:");
+		for(String skill : results.keySet()) {
+			System.out.println("Skill: "+skill+" Percent:"+results.get(skill)*100);
+		}
+		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+		Date date = new Date();
+		System.out.println(dateFormat.format(date));	
 	}
 }
