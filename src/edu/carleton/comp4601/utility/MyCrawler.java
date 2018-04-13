@@ -116,6 +116,15 @@ public class MyCrawler extends WebCrawler {
 					Pages pages = Pages.getInstance();
 					pages.addPage(jobLink, "");
 					
+					//String pattern = "jobKeysWithInfo\\['(.*)'\\] = true\\;";
+					//Pattern r = Pattern.compile(pattern);
+					//Matcher m = r.matcher(url);
+					//String jobKey = "";
+					//if(m.find()) {
+						//TODO System.out.println("match"+m.group(1));
+					//	jobKey = m.group(1);
+					//}
+							
 					/*
 					String pattern = "https://www.workopolis.com/jobsearch/(.*)-jobs/.*";
 					Pattern r = Pattern.compile(pattern);
