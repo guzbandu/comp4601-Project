@@ -91,7 +91,9 @@ public class MyCrawler extends WebCrawler {
           	 
           	 
           	//loop threw each regex link and connect to it using JSoup
-          	while (p.find()) {
+          	int jobsPrePage = 0;
+          	 while (p.find()) {
+          		jobsPrePage++;
           		System.out.println("hit");
           		//trim and polish regex link
 				String jobLink = p.group(1);
@@ -122,6 +124,8 @@ public class MyCrawler extends WebCrawler {
 					Pattern r = Pattern.compile(pattern);
 					Matcher m = r.matcher(url);
 					String searchSkill = "";
+					
+					
 					if(m.find()) {
 						//System.out.println("match"+m.group(1));
 						searchSkill = m.group(1);
@@ -150,6 +154,7 @@ public class MyCrawler extends WebCrawler {
 					for(String skill: skills.keySet()){
 						if(jobExpression.toLowerCase().indexOf(" " + skill + " ") != -1){
 							//System.out.println("we gotta skill boy: " + skill);
+							if(skill.equals(r)){System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~R URL: " + jobLink);}
 							Pages.getInstance().addSkill(jobLink, skill);
 						}
 					}
@@ -159,7 +164,7 @@ public class MyCrawler extends WebCrawler {
 					//e.printStackTrace();
 				}				
           	}
-          	 
+          	System.out.println(">>>>>>>>>>>>>>>>>>>>>>jobsperpage: " + jobsPrePage);
          }
          
         
