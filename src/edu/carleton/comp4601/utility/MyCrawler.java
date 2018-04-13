@@ -1,6 +1,5 @@
 package edu.carleton.comp4601.utility;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
@@ -16,7 +15,6 @@ import edu.uci.ics.crawler4j.parser.HtmlParseData;
 import edu.uci.ics.crawler4j.url.WebURL;
 
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class MyCrawler extends WebCrawler {
 
@@ -41,13 +39,12 @@ public class MyCrawler extends WebCrawler {
     	 //System.out.println("should: " + url);
     	 int pagenumber;
          String href = url.getURL().toLowerCase();
-         
         	 
         	 if((href.startsWith("https://www.workopolis.com/jobsearch/find-jobs?ak=java&l=canada&lg=en&pn="))){
         		 
         		 pagenumber = Integer.valueOf(href.substring(href.indexOf("pn=")+3));
         		 
-        		 System.out.println("MEGA HIT FAM: " + pagenumber);
+        		 //System.out.println("MEGA HIT FAM: " + pagenumber);
         		 
         		 
              	if(set.contains(pagenumber)){
@@ -56,10 +53,11 @@ public class MyCrawler extends WebCrawler {
              		repeat = false;
              		set.add(pagenumber);
              	}
+        	 } else if (href.startsWith("https://www.monster.ca/jobs/search/?q=")) {
+        		 
+        	 } else if (href.startsWith("https://www.indeed.ca/jobs?q=")) {
+        		 
         	 }
-        	 /*
-        	
-        	*/
          
          return !FILTERS.matcher(href).matches()
         		&& !repeat
@@ -92,23 +90,23 @@ public class MyCrawler extends WebCrawler {
           	 
           	//loop threw each regex link and connect to it using JSoup
           	while (p.find()) {
-          		System.out.println("hit");
+          		//System.out.println("hit");
           		//trim and polish regex link
 				String jobLink = p.group(1);
 				int startIndex = jobLink.indexOf("f=\"")+3;
 				int endIndex = jobLink.indexOf(" class")-1;
 				jobLink = jobLink.substring(startIndex, endIndex);
 				jobLink = "https://www.workopolis.com" + jobLink;
-				System.out.println("REGEX BABY: " + jobLink);
+				//System.out.println("REGEX BABY: " + jobLink);
 				
 				
 				//Connect+Parse using jsoup
 				
 				try {
 					//Connect
-					System.out.println();
-					System.out.println("job link: " + jobLink + " url: " + url);
-					System.out.println(count);
+					//System.out.println();
+					//System.out.println("job link: " + jobLink + " url: " + url);
+					//System.out.println(count);
 					
 					Document jobPage = Jsoup.connect(jobLink).get();
 					//--get location:
@@ -118,6 +116,7 @@ public class MyCrawler extends WebCrawler {
 					Pages pages = Pages.getInstance();
 					pages.addPage(jobLink, "");
 					
+					/*
 					String pattern = "https://www.workopolis.com/jobsearch/(.*)-jobs/.*";
 					Pattern r = Pattern.compile(pattern);
 					Matcher m = r.matcher(url);
@@ -140,8 +139,10 @@ public class MyCrawler extends WebCrawler {
 						if(!searchSkill.equals(""))
 							Pages.getInstance().addSkill(jobLink, searchSkill);
 						else
-							System.out.println("Java did not match!!:"+url);
+							System.out.println(searchSkill + " did not match!!:"+url);
 					}
+					*/
+					
 					count++;
 					HashMap<String, Boolean> skills = pages.getSkills(jobLink);
 					
@@ -149,7 +150,7 @@ public class MyCrawler extends WebCrawler {
 					String jobExpression = jobPage.html().toString().replace("\n", " ").replace(",", " ").replace(".", " ").replaceAll(";", " ");
 					for(String skill: skills.keySet()){
 						if(jobExpression.toLowerCase().indexOf(" " + skill + " ") != -1){
-							System.out.println("we gotta skill boy: " + skill);
+							//System.out.println("we gotta skill boy: " + skill);
 							Pages.getInstance().addSkill(jobLink, skill);
 						}
 					}
