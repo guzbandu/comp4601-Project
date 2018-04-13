@@ -119,7 +119,7 @@ public class CrawlerController {
         CrawlController controller = new CrawlController(config, pageFetcher, robotstxtServer);
         
        controller.addSeed("https://www.workopolis.com/jobsearch/find-jobs?&st=RELEVANCE&ak=" + searchword + "&l=canada&&pn=1");
-        //controller.addSeed("https://www.monster.ca/jobs/search/?q=" + searchword + "&where=canada");
+       //controller.addSeed("https://www.monster.ca/jobs/search/?q=" + searchword + "&where=canada");
        // controller.addSeed("https://www.indeed.ca/jobs?q=" + searchword + "&l=canada");
         
         controller.start(MyCrawler.class, numberOfCrawlers);

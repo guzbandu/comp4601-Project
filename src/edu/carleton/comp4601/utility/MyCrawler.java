@@ -22,6 +22,9 @@ public class MyCrawler extends WebCrawler {
 	static Set<Integer> set = new HashSet<Integer>();
 	static Set<Integer> setM = new HashSet<Integer>();
 	static Set<Integer> setI = new HashSet<Integer>();
+	
+	static Set<String> urls = new HashSet<String>();
+	
 	boolean repeat = false;
 	static int count = 0;
 	
@@ -161,30 +164,34 @@ public class MyCrawler extends WebCrawler {
 
             	 //@type":"ListItem","position":2,"url":"
             	 //(type.:.ListItem.,.position.:.,.url.:.*?})
-            	 Matcher m = Pattern.compile("(ListItem.\\,.position.\\:.\\,.url.\\:.*?\\})").matcher(expression);
+            	 Matcher m = Pattern.compile("(ListItem.\\,.position.\\:.*?\\,.url.\\:.*?\\})").matcher(expression);
             	 
             	 //Step TWO: Connect to each job link (pre search page)
               	 int jobsPrePage = 0;
-              	 while (m.find()) {
+              	 while (m.find() && jobsPrePage<26) {
               		jobsPrePage++;
               		
                		//trim and polish regex link
     				String jobLink = m.group(1);
-    				int startIndex = jobLink.indexOf("url\":\"")+5;
+    				int startIndex = jobLink.indexOf("url\":\"")+6;
     				int endIndex = jobLink.indexOf("}")-1;
     				jobLink = jobLink.substring(startIndex, endIndex);
-    				jobLink = "https://www.monster.ca" + jobLink;
     				if(detail==true){System.out.println("monster joblink: " + jobLink);}
-    				
+    				urls.add(jobLink);
     				
     				
     		     //Step THREE: Prase for skills (pre job page)
+    			    try { htmlParseForSkills(jobLink); }
+    				catch (Exception e) {
+    					if(detail==true){System.out.println("job link: " + jobLink + " url: " + url);}
+    					if(detail==true){System.out.println("Unable to reach url");}
+    				}
     								
               	}
-              	if(detail==true){System.out.println("Total Monster: " + jobsPrePage);}
-              	 
+              	if(detail==true){System.out.println("Total Monster at page " + url + ": " + jobsPrePage);}
+              	jobsPrePage = 0; 
              }
-             
+         	if(detail==true){System.out.println("urls set size: " + urls.size());}
           
              
         }
@@ -211,7 +218,7 @@ public class MyCrawler extends WebCrawler {
 		String jobExpression = jobPage.html().toString().replace("\n", " ").replace(",", " ").replace(".", " ").replaceAll(";", " ");
 		for(String skill: skills.keySet()){
 			if(jobExpression.toLowerCase().indexOf(" " + skill + " ") != -1){
-				if(detail==true){System.out.println("we gotta skill boy: " + skill);}
+				//if(detail==true){System.out.println("we gotta skill boy: " + skill);}
 				Pages.getInstance().addSkill(linkOfJobPost, skill);
 			}
 		}
