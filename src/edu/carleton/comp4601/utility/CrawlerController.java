@@ -114,9 +114,10 @@ public class CrawlerController {
         RobotstxtServer robotstxtServer = new RobotstxtServer(robotstxtConfig, pageFetcher);
         CrawlController controller = new CrawlController(config, pageFetcher, robotstxtServer);
         
-        controller.addSeed("https://www.workopolis.com/jobsearch/find-jobs?&st=RELEVANCE&ak=" + searchword + "&l=canada&&pn=1");
-        controller.addSeed("https://www.monster.ca/jobs/search/?q=" + searchword + "&where=canada");
-        controller.addSeed("https://www.indeed.ca/jobs?q=" + searchword + "&l=canada");
+        //controller.addSeed("https://www.workopolis.com/jobsearch/find-jobs?&st=RELEVANCE&ak=" + searchword + "&l=canada&&pn=1");
+        //controller.addSeed("https://www.monster.ca/jobs/search/?q=" + searchword + "&where=canada");
+        //controller.addSeed("https://www.eluta.ca/search?q=java&l=ON&qc=");
+        //controller.addSeed("https://www.eluta.ca/search?q=java&l=BC&qc=");
         
         controller.start(MyCrawler.class, numberOfCrawlers);
 	}
