@@ -46,6 +46,7 @@ public class CrawlerController {
 			HashMap<String, Boolean> skills = Pages.getInstance().getPages().get(url).getSkills();
 			for(String skill : skills.keySet()) {
 				if(skills.get(skill)) {
+					System.out.println("skill:"+skill);
 					counts.put(skill, counts.get(skill)+1);
 				}
 			}
@@ -104,7 +105,8 @@ public class CrawlerController {
 
         CrawlConfig config = new CrawlConfig();
         config.setCrawlStorageFolder(crawlStorageFolder);
-        config.setPolitenessDelay(100);
+        config.setPolitenessDelay(1000);
+        config.setMaxPagesToFetch(20);
 
        
         PageFetcher pageFetcher = new PageFetcher(config);
@@ -132,7 +134,7 @@ public class CrawlerController {
 	
 	
 	public static void main(String[] args) {
-		System.out.println("LETS GO");
+		System.out.println("!!!!!!!!!!LETS GO");
 		CrawlerController cc = new CrawlerController();
 		Map<String, Double> results = cc.getResults("java"); //TODO this is a stub until the actual crawling gets done
 		System.out.println("The top ten skills are:");

@@ -38,20 +38,32 @@ public class MyCrawler extends WebCrawler {
      */
      @Override
      public boolean shouldVisit(Page referringPage, WebURL url) {
+    	 //System.out.println("should: " + url);
     	 int pagenumber;
          String href = url.getURL().toLowerCase();
-         if((href.startsWith("https://www.workopolis.com/jobsearch/java-jobs/canada?pn="))){
-        	pagenumber = Integer.valueOf(href.substring(href.indexOf("pn=")+3));
-        	if(set.contains(pagenumber)){
-        		repeat = true;
-        	} else{
-        		repeat = false;
-        		set.add(pagenumber);
-        	}
-         }
+         
+        	 
+        	 if((href.startsWith("https://www.workopolis.com/jobsearch/find-jobs?ak=java&l=canada&lg=en&pn="))){
+        		 
+        		 pagenumber = Integer.valueOf(href.substring(href.indexOf("pn=")+3));
+        		 
+        		 System.out.println("MEGA HIT FAM: " + pagenumber);
+        		 
+        		 
+             	if(set.contains(pagenumber)){
+             		repeat = true;
+             	} else{
+             		repeat = false;
+             		set.add(pagenumber);
+             	}
+        	 }
+        	 /*
+        	
+        	*/
          
          return !FILTERS.matcher(href).matches()
-                && (href.startsWith("https://www.workopolis.com/jobsearch/java-jobs/canada?pn="));
+        		&& !repeat
+                && (href.startsWith("https://www.workopolis.com/jobsearch/find-jobs?ak=java&l=canada&lg=en&pn="));
      }
 
      /**
@@ -72,15 +84,19 @@ public class MyCrawler extends WebCrawler {
              //Regex code to find links for the jobs
              Document document = Jsoup.parse(htmlParseData.getHtml());
              String expression = document.html().toString().replace("\n", "");
-          	 Matcher p = Pattern.compile("(class=.search-result-item-link. href=.*? data-automation=.automation-job-url.>)").matcher(expression);
+          	 Matcher p = Pattern.compile("(schema.org/JobPosting.>.*?class)").matcher(expression);
+          	//schema.org/JobPosting"><a href=
+          	 
+          	
           	 
           	 
           	//loop threw each regex link and connect to it using JSoup
           	while (p.find()) {
+          		System.out.println("hit");
           		//trim and polish regex link
 				String jobLink = p.group(1);
 				int startIndex = jobLink.indexOf("f=\"")+3;
-				int endIndex = jobLink.indexOf("\" data");
+				int endIndex = jobLink.indexOf(" class")-1;
 				jobLink = jobLink.substring(startIndex, endIndex);
 				jobLink = "https://www.workopolis.com" + jobLink;
 				System.out.println("REGEX BABY: " + jobLink);
