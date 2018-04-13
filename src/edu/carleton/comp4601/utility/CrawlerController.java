@@ -33,6 +33,8 @@ public class CrawlerController {
 		//System.out.println(dateFormat.format(date));
 	}
 	
+	public static String crawlSearchWord = "default";
+	
 	public Map<String, Double> getResults(String searchTerm) {
 		System.out.println("getResults");
 		Map<String, Double> results = new LinkedHashMap<String, Double>();
@@ -100,6 +102,8 @@ public class CrawlerController {
 	//Decr: starts the craw
 	//Input: the keyword you want to search into each job website
 	private void crawl(String searchword) throws Exception{
+		crawlSearchWord = searchword;
+		
 		String crawlStorageFolder = System.getProperty("user.home")+"/.project/";
         int numberOfCrawlers = 7;
 
@@ -114,9 +118,9 @@ public class CrawlerController {
         RobotstxtServer robotstxtServer = new RobotstxtServer(robotstxtConfig, pageFetcher);
         CrawlController controller = new CrawlController(config, pageFetcher, robotstxtServer);
         
-        controller.addSeed("https://www.workopolis.com/jobsearch/find-jobs?&st=RELEVANCE&ak=" + searchword + "&l=canada&&pn=1");
-        controller.addSeed("https://www.monster.ca/jobs/search/?q=" + searchword + "&where=canada");
-        controller.addSeed("https://www.indeed.ca/jobs?q=" + searchword + "&l=canada");
+       controller.addSeed("https://www.workopolis.com/jobsearch/find-jobs?&st=RELEVANCE&ak=" + searchword + "&l=canada&&pn=1");
+        //controller.addSeed("https://www.monster.ca/jobs/search/?q=" + searchword + "&where=canada");
+       // controller.addSeed("https://www.indeed.ca/jobs?q=" + searchword + "&l=canada");
         
         controller.start(MyCrawler.class, numberOfCrawlers);
 	}

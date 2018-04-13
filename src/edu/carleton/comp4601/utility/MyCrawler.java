@@ -20,13 +20,18 @@ import java.util.regex.Matcher;
 public class MyCrawler extends WebCrawler {
 
 	static Set<Integer> set = new HashSet<Integer>();
+	static Set<Integer> setM = new HashSet<Integer>();
+	static Set<Integer> setI = new HashSet<Integer>();
 	boolean repeat = false;
 	static int count = 0;
+	
+	String searchWord = CrawlerController.crawlSearchWord;
+	
     private final static Pattern FILTERS = Pattern.compile(".*(\\.(css|js|gif|jpg"
                                                            + "|png|mp3|mp4|zip|gz))$");
 
    //turns testing prints on/off
-   boolean detail = false;
+   boolean detail = true;
     /**
      * This method receives two parameters. The first parameter is the page
      * in which we have discovered this new url and the second parameter is
@@ -39,17 +44,14 @@ public class MyCrawler extends WebCrawler {
      */
      @Override
      public boolean shouldVisit(Page referringPage, WebURL url) {
-    	 //System.out.println("should: " + url);
     	 int pagenumber;
          String href = url.getURL().toLowerCase();
+        
         	 
              /*Workopolis*/
-        	 if((href.startsWith("https://www.workopolis.com/jobsearch/find-jobs?ak=java&l=canada&lg=en&pn="))){
+        	 if((href.startsWith("https://www.workopolis.com/jobsearch/find-jobs?ak=" + searchWord + "&l=canada&lg=en&pn="))){
         		 
         		 pagenumber = Integer.valueOf(href.substring(href.indexOf("pn=")+3));
-        		 
-        		 //System.out.println("MEGA HIT FAM: " + pagenumber);
-        		 
         		 
              	if(set.contains(pagenumber)){
              		repeat = true;
@@ -61,9 +63,21 @@ public class MyCrawler extends WebCrawler {
         	 }
         	 
         	 /*Monster*/
-        	 else if (href.startsWith("https://www.monster.ca/jobs/search/?q=")) {
-        		
-              
+        	                         //https://www.monster.ca/jobs/search/?q=java&where=canada&page=2
+        	 else if (href.startsWith("https://www.monster.ca/jobs/search/?q=java&where=canada&page=")) {
+        		 if(detail==true){System.out.println("INITAL HIT");}
+        		 String pgnum = href.substring(href.indexOf("page=")+5);
+        		 if(detail==true){System.out.println("INITAL HIT: " + pgnum);}
+        		 pagenumber = Integer.valueOf(pgnum);
+        		 if(detail==true){System.out.println(">>>>>>>>>>>HIT: " + pagenumber);}
+        		 if(detail==true){System.out.println("should visit: " + url.getURL());}
+             	if(setM.contains(pagenumber)){
+             		repeat = true;
+             	} else{
+             		repeat = false;
+             		setM.add(pagenumber);
+             	}
+             		
         	 } 
         	 
         	 /*Indeed*/
@@ -73,7 +87,9 @@ public class MyCrawler extends WebCrawler {
          
          return !FILTERS.matcher(href).matches()
         		&& !repeat
-                && (href.startsWith("https://www.workopolis.com/jobsearch/find-jobs?ak=java&l=canada&lg=en&pn="));
+                && 
+                ((href.startsWith("https://www.workopolis.com/jobsearch/find-jobs?ak=" + searchWord + "&l=canada&lg=en&pn=")) ||
+                 (href.startsWith("https://www.monster.ca/jobs/search/?q=" + searchWord + "&where=canada&page=")));
      }
 
      /**
@@ -124,7 +140,7 @@ public class MyCrawler extends WebCrawler {
     					if(detail==true){System.out.println("Unable to reach url");}
     				}				
               	}
-              	if(detail==true){System.out.println(">>>>>>>>>>>>>>>>>>>>>>jobsperpage: " + jobsPrePage);}
+              	if(detail==true){System.out.println("jobsperpage: " + jobsPrePage);}
              
             	 
              }
@@ -142,11 +158,31 @@ public class MyCrawler extends WebCrawler {
              /*Monster*/
              else if(url.startsWith("https://www.monster.ca")){
             	 //Step ONE: Regex Search for job postings
+
+            	 //@type":"ListItem","position":2,"url":"
+            	 //(type.:.ListItem.,.position.:.,.url.:.*?})
+            	 Matcher m = Pattern.compile("(ListItem.\\,.position.\\:.\\,.url.\\:.*?\\})").matcher(expression);
             	 
-                 //Step TWO: Connect to each job link (pre search page)
-             	 
-             	//Step THREE: Prase for skills (pre job page)
-             	 
+            	 //Step TWO: Connect to each job link (pre search page)
+              	 int jobsPrePage = 0;
+              	 while (m.find()) {
+              		jobsPrePage++;
+              		
+               		//trim and polish regex link
+    				String jobLink = m.group(1);
+    				int startIndex = jobLink.indexOf("url\":\"")+5;
+    				int endIndex = jobLink.indexOf("}")-1;
+    				jobLink = jobLink.substring(startIndex, endIndex);
+    				jobLink = "https://www.monster.ca" + jobLink;
+    				if(detail==true){System.out.println("monster joblink: " + jobLink);}
+    				
+    				
+    				
+    		     //Step THREE: Prase for skills (pre job page)
+    								
+              	}
+              	if(detail==true){System.out.println("Total Monster: " + jobsPrePage);}
+              	 
              }
              
           
