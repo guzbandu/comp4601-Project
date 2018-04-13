@@ -10,6 +10,7 @@
 
 
     <logger name="org.mongodb.driver" level="WARN"/>
+    <logger name="edu.uci.ics.crawler4j" level="OFF"/>
 
     <root level="INFO">
         <appender-ref ref="STDOUT"/>

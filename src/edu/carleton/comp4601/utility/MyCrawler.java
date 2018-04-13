@@ -16,7 +16,6 @@ import edu.uci.ics.crawler4j.parser.HtmlParseData;
 import edu.uci.ics.crawler4j.url.WebURL;
 
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class MyCrawler extends WebCrawler {
 
@@ -26,7 +25,8 @@ public class MyCrawler extends WebCrawler {
     private final static Pattern FILTERS = Pattern.compile(".*(\\.(css|js|gif|jpg"
                                                            + "|png|mp3|mp4|zip|gz))$");
 
-   static boolean is_r_happening = false;
+   //turns testing prints on/off
+   boolean detail = false;
     /**
      * This method receives two parameters. The first parameter is the page
      * in which we have discovered this new url and the second parameter is
@@ -42,13 +42,13 @@ public class MyCrawler extends WebCrawler {
     	 //System.out.println("should: " + url);
     	 int pagenumber;
          String href = url.getURL().toLowerCase();
-         
         	 
+             /*Workopolis*/
         	 if((href.startsWith("https://www.workopolis.com/jobsearch/find-jobs?ak=java&l=canada&lg=en&pn="))){
         		 
         		 pagenumber = Integer.valueOf(href.substring(href.indexOf("pn=")+3));
         		 
-        		 System.out.println("MEGA HIT FAM: " + pagenumber);
+        		 //System.out.println("MEGA HIT FAM: " + pagenumber);
         		 
         		 
              	if(set.contains(pagenumber)){
@@ -57,10 +57,19 @@ public class MyCrawler extends WebCrawler {
              		repeat = false;
              		set.add(pagenumber);
              	}
+             
         	 }
-        	 /*
-        	
-        	*/
+        	 
+        	 /*Monster*/
+        	 else if (href.startsWith("https://www.monster.ca/jobs/search/?q=")) {
+        		
+              
+        	 } 
+        	 
+        	 /*Indeed*/
+        	 else if (href.startsWith("https://www.indeed.ca/jobs?q=")) {
+        		 
+        	 }
          
          return !FILTERS.matcher(href).matches()
         		&& !repeat
@@ -74,100 +83,108 @@ public class MyCrawler extends WebCrawler {
      @Override
      public void visit(Page page) {
          String url = page.getWebURL().getURL();
-         //System.out.println("URL: " + url);
+         if(detail==true){System.out.println("Search page URL: " + url);}
 
+         //Step ZERO: Basic Parsing...
          if (page.getParseData() instanceof HtmlParseData) {
              HtmlParseData htmlParseData = (HtmlParseData) page.getParseData();
              String text = htmlParseData.getText();
              String html = htmlParseData.getHtml();
              Set<WebURL> links = htmlParseData.getOutgoingUrls();
-             
-             //Regex code to find links for the jobs
              Document document = Jsoup.parse(htmlParseData.getHtml());
              String expression = document.html().toString().replace("\n", "");
-          	 Matcher p = Pattern.compile("(schema.org/JobPosting.>.*?class)").matcher(expression);
-          	//schema.org/JobPosting"><a href=
-          	 
-          	
-          	 
-          	 
-          	//loop threw each regex link and connect to it using JSoup
-          	int jobsPrePage = 0;
-          	 while (p.find()) {
-          		jobsPrePage++;
-          		System.out.println("hit");
-          		//trim and polish regex link
-				String jobLink = p.group(1);
-				int startIndex = jobLink.indexOf("f=\"")+3;
-				int endIndex = jobLink.indexOf(" class")-1;
-				jobLink = jobLink.substring(startIndex, endIndex);
-				jobLink = "https://www.workopolis.com" + jobLink;
-				System.out.println("REGEX BABY: " + jobLink);
-				
-				
-				//Connect+Parse using jsoup
-				
-				try {
-					//Connect
-					//System.out.println();
-					//System.out.println("job link: " + jobLink + " url: " + url);
-					//System.out.println(count);
-					
-					Document jobPage = Jsoup.connect(jobLink).get();
-					//--get location:
-					
-					//Parse
-					//--Add Page
-					Pages pages = Pages.getInstance();
-					pages.addPage(jobLink, "");
-					
-					String pattern = "https://www.workopolis.com/jobsearch/(.*)-jobs/.*";
-					Pattern r = Pattern.compile(pattern);
-					Matcher m = r.matcher(url);
-					String searchSkill = "";
-					
-					
-					if(m.find()) {
-						//System.out.println("match"+m.group(1));
-						searchSkill = m.group(1);
-					}
-					if(!searchSkill.equals(""))
-						Pages.getInstance().addSkill(jobLink, searchSkill);
-					else {
-						pattern = "https://www.workopolis.com/jobsearch/find-jobs\\?st=RELEVANCE\\&ak=(.*)\\&l=canada&pn=1";
-						r = Pattern.compile(pattern);
-						m = r.matcher(url);
-						searchSkill = "";
-						if(m.find()) {
-							//System.out.println("match"+m.group(1));
-							searchSkill = m.group(1);
-						}
-						if(!searchSkill.equals(""))
-							Pages.getInstance().addSkill(jobLink, searchSkill);
-						else
-							System.out.println("Java did not match!!:"+url);
-					}
-					count++;
-					HashMap<String, Boolean> skills = pages.getSkills(jobLink);
-					
-					//--look for each skill in page and make a note if it exists
-					String jobExpression = jobPage.html().toString().replace("\n", " ").replace(",", " ").replace(".", " ").replaceAll(";", " ");
-					for(String skill: skills.keySet()){
-						if(jobExpression.toLowerCase().indexOf(" " + skill + " ") != -1){
-							//System.out.println("we gotta skill boy: " + skill);
-							if(skill.equals(r)){System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~R URL: " + jobLink);}
-							Pages.getInstance().addSkill(jobLink, skill);
-						}
-					}
-				} catch (Exception e) {
-					System.out.println("job link: " + jobLink + " url: " + url);
-					System.out.println("Unable to reach url");
-					//e.printStackTrace();
-				}				
-          	}
-          	System.out.println(">>>>>>>>>>>>>>>>>>>>>>jobsperpage: " + jobsPrePage);
-         }
+             
+             
+             
+             /*Workopolis*/
+             if(url.startsWith("https://www.workopolis.com")){
+            	 
+            	 //Step ONE: Regex Search for job postings
+                 Matcher p = Pattern.compile("(schema.org/JobPosting.>.*?class)").matcher(expression);
+              	 
+              	 
+                 //Step TWO: Connect to each job link (pre search page)
+              	 int jobsPrePage = 0;
+              	 while (p.find()) {
+              		jobsPrePage++;
+              		
+               		//trim and polish regex link
+    				String jobLink = p.group(1);
+    				int startIndex = jobLink.indexOf("f=\"")+3;
+    				int endIndex = jobLink.indexOf(" class")-1;
+    				jobLink = jobLink.substring(startIndex, endIndex);
+    				jobLink = "https://www.workopolis.com" + jobLink;
+    			
+    				
+    				
+    		     //Step THREE: Prase for skills (pre job page)
+    				try { htmlParseForSkills(jobLink); } 
+    				catch (Exception e) {
+    					if(detail==true){System.out.println("job link: " + jobLink + " url: " + url);}
+    					if(detail==true){System.out.println("Unable to reach url");}
+    				}				
+              	}
+              	if(detail==true){System.out.println(">>>>>>>>>>>>>>>>>>>>>>jobsperpage: " + jobsPrePage);}
+             
+            	 
+             }
+             
+             /*Indeed*/
+             else if(url.startsWith("https://www.indeed.ca")){
+            	//Step ONE: Regex Search for job postings
+            	 
+                //Step TWO: Connect to each job link (pre search page)
+            	 
+            	//Step THREE: Prase for skills (pre job page)
+            	 
+             }
+             
+             /*Monster*/
+             else if(url.startsWith("https://www.monster.ca")){
+            	 //Step ONE: Regex Search for job postings
+            	 
+                 //Step TWO: Connect to each job link (pre search page)
+             	 
+             	//Step THREE: Prase for skills (pre job page)
+             	 
+             }
+             
+          
+             
+        }
          
         
     }
+     
+     
+     public void htmlParseForSkills(String linkOfJobPost) throws IOException{
+    	 
+    	 //Step One: Connect
+		Document jobPage = Jsoup.connect(linkOfJobPost).get();
+		
+		//Step Two: Pre-Parse
+		Pages pages = Pages.getInstance();
+		pages.addPage(linkOfJobPost, "");
+		
+		//Step Three: Parsing
+		 //--setup
+		count++;
+		HashMap<String, Boolean> skills = pages.getSkills(linkOfJobPost);
+		
+		 //--look for each skill in page and make a note if it exists
+		String jobExpression = jobPage.html().toString().replace("\n", " ").replace(",", " ").replace(".", " ").replaceAll(";", " ");
+		for(String skill: skills.keySet()){
+			if(jobExpression.toLowerCase().indexOf(" " + skill + " ") != -1){
+				if(detail==true){System.out.println("we gotta skill boy: " + skill);}
+				Pages.getInstance().addSkill(linkOfJobPost, skill);
+			}
+		}
+		
+		
+		
+		
+    	 
+    	 
+    	 
+     }
 }

@@ -41,11 +41,12 @@ public class CrawlerController {
 		for(String skill : Skills.getInstance().getSkills()) {
 			counts.put(skill, 0);
 		}
-		createPages(); //TODO this is a stub where the actual crawl structure would have been created
+		createPages(searchTerm); //TODO this is a stub where the actual crawl structure would have been created
 		for(String url : Pages.getInstance().getPages().keySet()) {
 			HashMap<String, Boolean> skills = Pages.getInstance().getPages().get(url).getSkills();
 			for(String skill : skills.keySet()) {
 				if(skills.get(skill)) {
+					//System.out.println("skill:"+skill);
 					counts.put(skill, counts.get(skill)+1);
 				}
 			}
@@ -58,6 +59,7 @@ public class CrawlerController {
 			counts.remove(equivalencies.get(skill1));
 		}
 		
+		System.out.println("Number of java hits"+counts.get(searchTerm));
 		for(String skill : counts.keySet()) {
 			ratios.put(skill, (double)counts.get(skill)/(double)counts.get(searchTerm));
 		}
@@ -113,16 +115,18 @@ public class CrawlerController {
         CrawlController controller = new CrawlController(config, pageFetcher, robotstxtServer);
         
         controller.addSeed("https://www.workopolis.com/jobsearch/find-jobs?&st=RELEVANCE&ak=" + searchword + "&l=canada&&pn=1");
+        controller.addSeed("https://www.monster.ca/jobs/search/?q=" + searchword + "&where=canada");
+        controller.addSeed("https://www.indeed.ca/jobs?q=" + searchword + "&l=canada");
         
         controller.start(MyCrawler.class, numberOfCrawlers);
 	}
 	
 	
-	private void createPages() {
-		System.out.println("createPage");
+	private void createPages(String searchTerm) {
+		//System.out.println("createPage");
 		//Step One: crawl to get the links of all the jobs pages
 		try {
-			crawl("java");
+			crawl(searchTerm);
 		} catch (Exception e) {e.printStackTrace();}
 		
 		
@@ -132,14 +136,16 @@ public class CrawlerController {
 	
 	
 	public static void main(String[] args) {
-		System.out.println("!!!!!!!!!!LETS GO");
+		//System.out.println("!!!!!!!!!!LETS GO");
+		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+		Date startdate = new Date();
+		System.out.println(dateFormat.format(startdate));	
 		CrawlerController cc = new CrawlerController();
 		Map<String, Double> results = cc.getResults("java"); //TODO this is a stub until the actual crawling gets done
 		System.out.println("The top ten skills are:");
 		for(String skill : results.keySet()) {
 			System.out.println("Skill: "+skill+" Percent:"+results.get(skill)*100);
-		}
-		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+		}		
 		Date date = new Date();
 		System.out.println(dateFormat.format(date));	
 	}
