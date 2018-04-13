@@ -41,7 +41,7 @@ public class CrawlerController {
 		for(String skill : Skills.getInstance().getSkills()) {
 			counts.put(skill, 0);
 		}
-		createPages(); //TODO this is a stub where the actual crawl structure would have been created
+		createPages(searchTerm); //TODO this is a stub where the actual crawl structure would have been created
 		for(String url : Pages.getInstance().getPages().keySet()) {
 			HashMap<String, Boolean> skills = Pages.getInstance().getPages().get(url).getSkills();
 			for(String skill : skills.keySet()) {
@@ -58,6 +58,7 @@ public class CrawlerController {
 			counts.remove(equivalencies.get(skill1));
 		}
 		
+		System.out.println("Number of java hits"+counts.get(searchTerm));
 		for(String skill : counts.keySet()) {
 			ratios.put(skill, (double)counts.get(skill)/(double)counts.get(searchTerm));
 		}
@@ -117,11 +118,11 @@ public class CrawlerController {
 	}
 	
 	
-	private void createPages() {
+	private void createPages(String searchTerm) {
 		System.out.println("createPage");
 		//Step One: crawl to get the links of all the jobs pages
 		try {
-			crawl("java");
+			crawl(searchTerm);
 		} catch (Exception e) {e.printStackTrace();}
 		
 		

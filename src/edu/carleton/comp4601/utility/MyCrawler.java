@@ -83,16 +83,16 @@ public class MyCrawler extends WebCrawler {
 				int endIndex = jobLink.indexOf("\" data");
 				jobLink = jobLink.substring(startIndex, endIndex);
 				jobLink = "https://www.workopolis.com" + jobLink;
-				//System.out.println("REGEX BABY: " + jobLink);
+				System.out.println("REGEX BABY: " + jobLink);
 				
 				
 				//Connect+Parse using jsoup
 				
 				try {
 					//Connect
-					//System.out.println();
-					//System.out.println("job link: " + jobLink + " url: " + url);
-					//System.out.println(count);
+					System.out.println();
+					System.out.println("job link: " + jobLink + " url: " + url);
+					System.out.println(count);
 					
 					Document jobPage = Jsoup.connect(jobLink).get();
 					//--get location:
@@ -133,7 +133,7 @@ public class MyCrawler extends WebCrawler {
 					String jobExpression = jobPage.html().toString().replace("\n", " ").replace(",", " ").replace(".", " ").replaceAll(";", " ");
 					for(String skill: skills.keySet()){
 						if(jobExpression.toLowerCase().indexOf(" " + skill + " ") != -1){
-							//System.out.println("we gotta skill boy: " + skill);
+							System.out.println("we gotta skill boy: " + skill);
 							Pages.getInstance().addSkill(jobLink, skill);
 						}
 					}
