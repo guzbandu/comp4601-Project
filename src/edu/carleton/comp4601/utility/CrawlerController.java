@@ -3,6 +3,7 @@ package edu.carleton.comp4601.utility;
 import java.net.UnknownHostException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -29,16 +30,7 @@ public class CrawlerController {
 	DatabaseSingleton db; 
 	
 	
-	public CrawlerController() {
-		//Map<String, Double> results = getResults("java"); //TODO this is a stub until the actual crawling gets done
-		//System.out.println("The top ten skills are:");
-		//for(String skill : results.keySet()) {
-			//System.out.println("Skill: "+skill+" Percent:"+results.get(skill)*100);
-		//}
-		//DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-		//Date date = new Date();
-		//System.out.println(dateFormat.format(date));
-		
+	public CrawlerController() {		
 		try { db = DatabaseSingleton.getInstance();}
 		catch (UnknownHostException e) {e.printStackTrace();}
 	}
@@ -67,6 +59,7 @@ public class CrawlerController {
 		//Deal with equivalencies
 		HashMap<String, String> equivalencies = Equivalencies.getInstance().getEquivalencies();
 		for(String skill1 : equivalencies.keySet()) {
+			System.out.println("skill1:"+skill1+" skill2:"+equivalencies.get(skill1));
 			counts.put(skill1, counts.get(skill1)+counts.get(equivalencies.get(skill1)));
 			counts.remove(equivalencies.get(skill1));
 		}
@@ -74,7 +67,11 @@ public class CrawlerController {
 		System.out.println("Number of search term hits"+counts.get(searchTerm));
 
 		for(String skill : counts.keySet()) {
-			ratios.put(skill, (double)counts.get(skill)/(double)counts.get(searchTerm));
+			if(counts.get(searchTerm)==0) {
+				ratios.put(skill, 0d);
+			} else {
+				ratios.put(skill, (double)counts.get(skill)/(double)counts.get(searchTerm));
+			}
 		}
 		//Find the top 10 ratios
 		Map<String, Double> sortedRatios = sortByComparator(ratios);
@@ -86,14 +83,15 @@ public class CrawlerController {
 				break;
 		}
 		
+		results.remove(searchTerm);
+		
 		//DATABASE CODE
 		//Add SearchWord-skill to DB with Map of corresponding skills
 		BasicDBObject objectToAdd = new BasicDBObject();
 		objectToAdd.append("skill", crawlSearchWord);
-		objectToAdd.append("associates", sortedRatios.toString());
+		objectToAdd.append("associates", results.toString());
 		db.addToCollection("relatedSkills", objectToAdd);
-		
-		results.remove(searchTerm);
+				
 		return results;
 	}
 
@@ -139,8 +137,8 @@ public class CrawlerController {
         
 
         controller.addSeed("https://www.workopolis.com/jobsearch/find-jobs?&st=RELEVANCE&ak=" + searchword + "&l=canada&&pn=1");
-        //controller.addSeed("https://www.monster.ca/jobs/search/?q=" + searchword + "&where=canada");
-        //controller.addSeed("https://www.jobboom.com/en/job/" + searchword + "_canada/_k-1?dk=" + searchword + "&location=canada&defaultDistance=true");;       
+        controller.addSeed("https://www.monster.ca/jobs/search/?q=" + searchword + "&where=canada");
+        controller.addSeed("https://www.jobboom.com/en/job/" + searchword + "_canada/_k-1?dk=" + searchword + "&location=canada&defaultDistance=true");;       
         
         controller.start(MyCrawler.class, numberOfCrawlers);
 	}
@@ -166,12 +164,129 @@ public class CrawlerController {
 		System.out.println(dateFormat.format(startdate));	
 		CrawlerController cc = new CrawlerController();
 		
-		Map<String, Double> results = cc.getResults("python"); //TODO this is a stub until the actual crawling gets done
-		System.out.println("The top ten skills are:");
-		for(String skill : results.keySet()) {
-			System.out.println("Skill: "+skill+" Percent:"+results.get(skill)*100);
-		}		
-		Date date = new Date();
-		System.out.println(dateFormat.format(date));	
+		//List of skills
+		//
+		List<String> automate = new ArrayList<String>();
+		//automate.add("c++");
+		//automate.add("tomcat");
+		//automate.add("react");
+		//automate.add("ip security");
+		automate.add("kanban");
+		//automate.add("sass");
+		//automate.add("wcf");
+		automate.add("foxpro");
+
+		//gtk
+		//azure
+		//python
+		//d3 js
+		//ip
+		//caffe
+		//dns
+		//objective c
+		//akka
+		//sql server
+		//microstrategy
+		//angular
+		//struts
+		//kafka
+		//handlebar
+		//hive
+		//artifactory
+		//dom
+		//openshift
+		//bootstrap
+		//tensorflow
+		//maf
+		//chart js
+		//jenkins
+		//pl-sql
+		//macos
+		//scipy
+		//sonarqube
+		//jsoup
+		//excel
+		//pandas
+		//pivotal
+		//netconf/yang
+		//php
+		//yarn
+		//cucumber
+		//circleci
+		//vb net
+		//tcp/ip
+		//pig
+		//jms
+		//natural langauge processing
+		//webpack
+		//yocto
+		//apache spark
+		//asp net
+		//j2ee
+		//html
+		//orientdb
+		//etl
+		//adworks
+		//unreal engine
+		//jira
+		//matlab
+		//angular js
+		//maven
+		//android studio
+		//visual studio
+		//maya
+		//google protocol buffers
+		//angularjs
+		//soap
+		//unix
+		//elixir
+		//samza
+		//scala
+		//crystal reports
+		//jade
+		//firebasemessaging
+		//jquery
+		//sql
+		//grunt
+		//qml
+		//rust
+		//unity
+		//git
+		//postgresql
+		//web/db
+		//jpa
+		//mongodb
+		//dhcp
+		//rest
+		//steamworks
+		//chef
+		//jeria
+		//mfc
+		//ruby
+		//puppet
+		//tableau
+		//fraud managment
+		//ceph
+		//subversion
+		//srcum
+		//servlets
+		//lua
+		//qnx
+		//vuejs
+		//xslt
+		//aws
+		//scikit
+		//opencv
+		
+		for(String searchSk : automate) {
+			Map<String, Double> results = cc.getResults(searchSk); //TODO this is a stub until the actual crawling gets done
+			System.out.println("Searching: "+searchSk);
+			System.out.println("The top ten skills are:");
+			for(String skill : results.keySet()) {
+				System.out.println("Skill: "+skill+" Percent:"+results.get(skill)*100);
+			}		
+			Date date = new Date();
+			System.out.println(dateFormat.format(date));				
+		}
 	}
 }
