@@ -51,14 +51,14 @@ public class DatabaseSingleton {
 		 DBCursor result = coll.find(query);
 		
 		//IT EXISTS: Update
-		 if(result != null){
+		if(result.count()!=0) { 
 			BasicDBObject searchQuery = new BasicDBObject().append("skill", objectToAdd.getString("skill"));
 			coll.update(searchQuery, objectToAdd);
 		 
 		 }
 		 
 		//IT IS NEW: Add
-		 else if (result == null){
+		 else if (result.count()==0){
 			 getCollection(collectionName).insert(objectToAdd); 
 		 }
 		 
