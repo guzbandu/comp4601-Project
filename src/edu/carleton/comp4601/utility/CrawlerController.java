@@ -147,7 +147,7 @@ public class CrawlerController {
 		Date startdate = new Date();
 		System.out.println(dateFormat.format(startdate));	
 		CrawlerController cc = new CrawlerController();
-
+		
 		Map<String, Double> results = cc.getResults("python"); //TODO this is a stub until the actual crawling gets done
 		System.out.println("The top ten skills are:");
 		for(String skill : results.keySet()) {
