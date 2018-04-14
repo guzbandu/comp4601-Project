@@ -62,6 +62,7 @@ public class CrawlerController {
 		}
 		
 		System.out.println("Number of search term hits"+counts.get(searchTerm));
+
 		for(String skill : counts.keySet()) {
 			ratios.put(skill, (double)counts.get(skill)/(double)counts.get(searchTerm));
 		}
@@ -146,6 +147,7 @@ public class CrawlerController {
 		Date startdate = new Date();
 		System.out.println(dateFormat.format(startdate));	
 		CrawlerController cc = new CrawlerController();
+
 		Map<String, Double> results = cc.getResults("python"); //TODO this is a stub until the actual crawling gets done
 		System.out.println("The top ten skills are:");
 		for(String skill : results.keySet()) {
