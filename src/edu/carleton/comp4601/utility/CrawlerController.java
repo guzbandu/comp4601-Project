@@ -1,5 +1,6 @@
 package edu.carleton.comp4601.utility;
 
+import java.net.UnknownHostException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Collections;
@@ -12,6 +13,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import com.mongodb.BasicDBObject;
+
 import edu.carleton.comp4601.dao.Equivalencies;
 import edu.carleton.comp4601.dao.Skills;
 import edu.carleton.comp4601.model.Pages;
@@ -22,6 +25,10 @@ import edu.uci.ics.crawler4j.robotstxt.RobotstxtConfig;
 import edu.uci.ics.crawler4j.robotstxt.RobotstxtServer;
 
 public class CrawlerController {
+	
+	DatabaseSingleton db; 
+	
+	
 	public CrawlerController() {
 		//Map<String, Double> results = getResults("java"); //TODO this is a stub until the actual crawling gets done
 		//System.out.println("The top ten skills are:");
@@ -31,6 +38,9 @@ public class CrawlerController {
 		//DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 		//Date date = new Date();
 		//System.out.println(dateFormat.format(date));
+		
+		try { db = DatabaseSingleton.getInstance();}
+		catch (UnknownHostException e) {e.printStackTrace();}
 	}
 	
 	public static String crawlSearchWord = "default";
@@ -75,6 +85,14 @@ public class CrawlerController {
 			if(i>=11)
 				break;
 		}
+		
+		//DATABASE CODE
+		//Add SearchWord-skill to DB with Map of corresponding skills
+		BasicDBObject objectToAdd = new BasicDBObject();
+		objectToAdd.append("skill", crawlSearchWord);
+		objectToAdd.append("associates", sortedRatios.toString());
+		db.addToCollection("relatedSkills", objectToAdd);
+		
 		results.remove(searchTerm);
 		return results;
 	}
@@ -111,7 +129,7 @@ public class CrawlerController {
         CrawlConfig config = new CrawlConfig();
         config.setCrawlStorageFolder(crawlStorageFolder);
         config.setPolitenessDelay(1000);
-        config.setMaxPagesToFetch(20);
+        config.setMaxPagesToFetch(10);
 
        
         PageFetcher pageFetcher = new PageFetcher(config);
@@ -121,8 +139,8 @@ public class CrawlerController {
         
 
         controller.addSeed("https://www.workopolis.com/jobsearch/find-jobs?&st=RELEVANCE&ak=" + searchword + "&l=canada&&pn=1");
-        controller.addSeed("https://www.monster.ca/jobs/search/?q=" + searchword + "&where=canada");
-        controller.addSeed("https://www.jobboom.com/en/job/" + searchword + "_canada/_k-1?dk=" + searchword + "&location=canada&defaultDistance=true");;       
+        //controller.addSeed("https://www.monster.ca/jobs/search/?q=" + searchword + "&where=canada");
+        //controller.addSeed("https://www.jobboom.com/en/job/" + searchword + "_canada/_k-1?dk=" + searchword + "&location=canada&defaultDistance=true");;       
         
         controller.start(MyCrawler.class, numberOfCrawlers);
 	}

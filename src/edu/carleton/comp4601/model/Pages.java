@@ -2,6 +2,8 @@ package edu.carleton.comp4601.model;
 
 import java.util.HashMap;
 
+import com.mongodb.BasicDBObject;
+
 public class Pages {
 	private static Pages instance;
 	HashMap<String, PageSummary> pages;
