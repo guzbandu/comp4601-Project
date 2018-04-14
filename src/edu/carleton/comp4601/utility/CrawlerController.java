@@ -119,7 +119,7 @@ public class CrawlerController {
         CrawlController controller = new CrawlController(config, pageFetcher, robotstxtServer);
         
        controller.addSeed("https://www.workopolis.com/jobsearch/find-jobs?&st=RELEVANCE&ak=" + searchword + "&l=canada&&pn=1");
-       //controller.addSeed("https://www.monster.ca/jobs/search/?q=" + searchword + "&where=canada");
+       controller.addSeed("https://www.monster.ca/jobs/search/?q=" + searchword + "&where=canada");
        // controller.addSeed("https://www.indeed.ca/jobs?q=" + searchword + "&l=canada");
         
         controller.start(MyCrawler.class, numberOfCrawlers);
@@ -145,7 +145,7 @@ public class CrawlerController {
 		Date startdate = new Date();
 		System.out.println(dateFormat.format(startdate));	
 		CrawlerController cc = new CrawlerController();
-		Map<String, Double> results = cc.getResults("java"); //TODO this is a stub until the actual crawling gets done
+		Map<String, Double> results = cc.getResults("html"); //TODO this is a stub until the actual crawling gets done
 		System.out.println("The top ten skills are:");
 		for(String skill : results.keySet()) {
 			System.out.println("Skill: "+skill+" Percent:"+results.get(skill)*100);
