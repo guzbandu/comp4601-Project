@@ -41,7 +41,7 @@ public class MyCrawler extends WebCrawler {
                                                            + "|png|mp3|mp4|zip|gz))$");
 
    //turns testing prints on/off
-   boolean detail = true;
+   boolean detail = false;
     /**
      * This method receives two parameters. The first parameter is the page
      * in which we have discovered this new url and the second parameter is
@@ -54,6 +54,7 @@ public class MyCrawler extends WebCrawler {
      */
      @Override
      public boolean shouldVisit(Page referringPage, WebURL url) {
+    	 if(detail) {System.out.println("should: " + url);}
     	 int pagenumber;
          String href = url.getURL().toLowerCase();
         
@@ -90,16 +91,24 @@ public class MyCrawler extends WebCrawler {
              		
         	 } 
         	 
-        	 /*Indeed*/
-        	 else if (href.startsWith("https://www.indeed.ca/jobs?q=")) {
+        	 else if (href.startsWith("/search?q=java+sort%3Apost+province_id%3A2+radius%3A50+location%3ABC&amp;pg=")) {
+        		 pagenumber = Integer.valueOf(href.substring(href.indexOf("pg=")+3));
         		 
+              	if(set.contains(pagenumber)){
+             		repeat = true;
+             	} else{
+             		repeat = false;
+             		set.add(pagenumber);
+             	}
+
         	 }
-         
+        	         	 
          return !FILTERS.matcher(href).matches()
         		&& !repeat
-                && 
-                ((href.startsWith("https://www.workopolis.com/jobsearch/find-jobs?ak=" + searchWord + "&l=canada&lg=en&pn=")) ||
-                 (href.startsWith("https://www.monster.ca/jobs/search/?q=" + searchWord + "&where=canada&page=")));
+                && (href.startsWith("https://www.workopolis.com/jobsearch/find-jobs?ak=" + searchWord + "&l=canada&lg=en&pn=")
+                		|| href.startsWith("https://www.eluta.ca/search?q=java&l=ON&qc=")
+                		|| href.startsWith("https://www.eluta.ca/search?q=java&l=BC&qc=")
+                		|| href.startsWith("https://www.monster.ca/jobs/search/?q=" + searchWord + "&where=canada&page="));
      }
      
      
@@ -130,7 +139,6 @@ public class MyCrawler extends WebCrawler {
              Set<WebURL> links = htmlParseData.getOutgoingUrls();
              Document document = Jsoup.parse(htmlParseData.getHtml());
              String expression = document.html().toString().replace("\n", "");
-             
              
              
              /*Workopolis*/
@@ -168,17 +176,7 @@ public class MyCrawler extends WebCrawler {
              
             	 
              }
-             
-             /*Indeed*/
-             else if(url.startsWith("https://www.indeed.ca")){
-            	//Step ONE: Regex Search for job postings
-            	 
-                //Step TWO: Connect to each job link (pre search page)
-            	 
-            	//Step THREE: Prase for skills (pre job page)
-            	 
-             }
-             
+                         
              /*Monster*/
              else if(url.startsWith("https://www.monster.ca")){
             	 //Step ONE: Regex Search for job postings
@@ -215,13 +213,16 @@ public class MyCrawler extends WebCrawler {
               	jobsPrePage = 0; 
               	if(detail==true){System.out.println("urls set size: " + urls.size() + " totalCount: " + jobCount);}
              }
-         	
+
           
              
-        }
+         }  
          
+         	
+             
         
-    }
+     }
+   
      
      
      public void htmlParseForSkills(String linkOfJobPost) throws IOException{
