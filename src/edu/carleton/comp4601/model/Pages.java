@@ -7,6 +7,10 @@ import com.mongodb.BasicDBObject;
 public class Pages {
 	private static Pages instance;
 	HashMap<String, PageSummary> pages;
+
+	public synchronized void reset(){
+		 pages = new HashMap<String, PageSummary>();
+	}
 	
 	public synchronized static Pages getInstance() {
 		if (instance == null)

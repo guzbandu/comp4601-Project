@@ -279,6 +279,7 @@ public class CrawlerController {
 		//opencv
 		
 		for(String searchSk : automate) {
+			Pages.getInstance().reset();
 			Map<String, Double> results = cc.getResults(searchSk); //TODO this is a stub until the actual crawling gets done
 			System.out.println("Searching: "+searchSk);
 			System.out.println("The top ten skills are:");
