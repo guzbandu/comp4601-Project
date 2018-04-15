@@ -1,7 +1,12 @@
 //Sahaj Arora 100961220 Luke Daschko 100976007 Jennifer Franklin 100315764
 package edu.carleton.comp4601.resources;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import javax.ws.rs.GET;
@@ -18,6 +23,7 @@ import org.json.JSONObject;
 
 import javax.ws.rs.core.Response;
 
+import edu.carleton.comp4601.dao.RelatedSkills;
 import edu.carleton.comp4601.dao.Skills;
 import edu.carleton.comp4601.utility.CrawlerController;
 
@@ -72,7 +78,8 @@ public class Project {
         try {
         	object =  new JSONObject();
         	CrawlerController cc = new CrawlerController();
-        	Map<String, Double> results = cc.getResults(searchTerm);
+        	String result = java.net.URLDecoder.decode(searchTerm, "UTF-8");
+        	Map<String, Double> results = cc.getResults(result, true);
         	for(String skill : results.keySet()) {
         		object.put(skill, results.get(skill));
         	}
@@ -80,28 +87,29 @@ public class Project {
         } catch (Exception e) {
             System.out.println("error=" + e.getMessage());
         }
+				
         return response;			
 	}
 	
-	//@GET
-	//@Path("db/skill")
-	//@Produces(MediaType.APPLICATION_JSON)
-	//public Response getTopTenRelatedSkillsFromDB(
-	//		@PathParam("skill")	String	searchTerm) {
-	//	JSONObject object = null;
-     //   Response response = null;
-     //   try {
-       // 	object =  new JSONObject();
-        	//
-        	//Map<String, Double> results = cc.getResults(searchTerm);
-        	//for(String skill : results.keySet()) {
-        	//	object.put(skill, results.get(skill));
-        	//}
-        	//response = Response.status(Status.OK).entity(object.toString()).build();
-        //} catch (Exception e) {
-         //   System.out.println("error=" + e.getMessage());
-       // }
-       // return response;			
-	//}
+	@GET
+	@Path("db/{skill}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getTopTenRelatedSkillsFromDB(
+			@PathParam("skill")	String	searchTerm) {
+		JSONObject object = null;
+        Response response = null;
+        try {
+        	object =  new JSONObject();
+        	String result = java.net.URLDecoder.decode(searchTerm, "UTF-8");
+        	Map<String, Double> relatedSkills = RelatedSkills.getInstance().getRelatedSkills(result);
+        	for(String skill : relatedSkills.keySet()) {
+        		object.put(skill, relatedSkills.get(skill));
+        	}
+        	response = Response.status(Status.OK).entity(object.toString()).build();
+        } catch (Exception e) {
+            System.out.println("error=" + e.getMessage());
+        }
+        return response;			
+	}
 
 }

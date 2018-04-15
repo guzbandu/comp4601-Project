@@ -75,7 +75,6 @@ public class DatabaseSingleton {
 	}
 	
 	
-	
 	public synchronized void closeConnection() {
 		dbClient.close();
 	}
