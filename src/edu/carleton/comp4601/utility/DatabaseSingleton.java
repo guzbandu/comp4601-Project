@@ -47,18 +47,18 @@ public class DatabaseSingleton {
 		DBCollection coll = getCollection(collectionName);
 		
 		//Step ONE: see if it object already exists
-		 DBObject query = new BasicDBObject(objectToAdd.getString("skill"), new BasicDBObject("$exists", true));
-		 DBCursor result = coll.find(query);
+		 BasicDBObject query = new BasicDBObject().append("skill", objectToAdd.get("skill"));
+		 BasicDBObject result = findObject(collectionName, query);
 		
 		//IT EXISTS: Update
-		if(result.count()!=0) { 
+		if(result != null) { 
 			BasicDBObject searchQuery = new BasicDBObject().append("skill", objectToAdd.getString("skill"));
 			coll.update(searchQuery, objectToAdd);
 		 
 		 }
 		 
 		//IT IS NEW: Add
-		 else if (result.count()==0){
+		 else{
 			 getCollection(collectionName).insert(objectToAdd); 
 		 }
 		 
@@ -66,6 +66,15 @@ public class DatabaseSingleton {
 		
 		
 	}
+	
+	public synchronized BasicDBObject findObject(String collectionName, BasicDBObject document){
+		BasicDBObject obj = (BasicDBObject)getCollection(collectionName).findOne(document);
+		if(obj == null)
+			return null;
+		return obj;
+	}
+	
+	
 	
 	public synchronized void closeConnection() {
 		dbClient.close();

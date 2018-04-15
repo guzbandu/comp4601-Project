@@ -42,7 +42,7 @@ public class MyCrawler extends WebCrawler {
                                                            + "|png|mp3|mp4|zip|gz))$");
 
    //turns testing prints on/off
-   boolean detail = false;
+   boolean detail = true;
     /**
      * This method receives two parameters. The first parameter is the page
      * in which we have discovered this new url and the second parameter is
@@ -175,8 +175,7 @@ public class MyCrawler extends WebCrawler {
     			 //Step THREE: Prase for skills (pre job page)
         			    try { htmlParseForSkills(jobLink); }
         				catch (Exception e) {
-        					if(detail==true){System.out.println("job link: " + jobLink + " url: " + url);}
-        					if(detail==true){System.out.println("Unable to reach url");}
+        					System.out.println("\n ============================== \n Unable to reach \n url job link: " + jobLink + " url: " + url +"\n ========================== \n");
         				}
     				}
               	}
@@ -210,8 +209,7 @@ public class MyCrawler extends WebCrawler {
     			 //Step THREE: Prase for skills (pre job page)
         			    try { htmlParseForSkills(jobLink); }
         				catch (Exception e) {
-        					if(detail==true){System.out.println("job link: " + jobLink + " url: " + url);}
-        					if(detail==true){System.out.println("Unable to reach url");}
+        					System.out.println("\n ============================== \n Unable to reach \n url job link: " + jobLink + " url: " + url +"\n ========================== \n");
         				}
     				}
     				jobCount++;				
@@ -245,8 +243,7 @@ public class MyCrawler extends WebCrawler {
     	    		     //Step THREE: Prase for skills (pre job page)
         				try { htmlParseForSkillsJobBoom(jobLink); } 
         				catch (Exception e) {
-        					if(detail==true){System.out.println("job link: " + jobLink + " url: " + url);}
-        					if(detail==true){System.out.println("Unable to reach url");}
+        					System.out.println("\n ============================== \n Unable to reach \n url job link: " + jobLink + " url: " + url +"\n ========================== \n");
         				}				
 
     				}    				
