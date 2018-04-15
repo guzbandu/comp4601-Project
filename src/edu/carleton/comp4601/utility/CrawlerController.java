@@ -1,16 +1,24 @@
 package edu.carleton.comp4601.utility;
 
+import java.net.UnknownHostException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+
+import com.mongodb.BasicDBObject;
+import com.mongodb.DBCollection;
+import com.mongodb.DBCursor;
+import com.mongodb.DBObject;
 
 import edu.carleton.comp4601.dao.Equivalencies;
 import edu.carleton.comp4601.dao.Skills;
@@ -22,15 +30,13 @@ import edu.uci.ics.crawler4j.robotstxt.RobotstxtConfig;
 import edu.uci.ics.crawler4j.robotstxt.RobotstxtServer;
 
 public class CrawlerController {
-	public CrawlerController() {
-		//Map<String, Double> results = getResults("java"); //TODO this is a stub until the actual crawling gets done
-		//System.out.println("The top ten skills are:");
-		//for(String skill : results.keySet()) {
-			//System.out.println("Skill: "+skill+" Percent:"+results.get(skill)*100);
-		//}
-		//DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-		//Date date = new Date();
-		//System.out.println(dateFormat.format(date));
+	
+	DatabaseSingleton db; 
+	
+	
+	public CrawlerController() {		
+		try { db = DatabaseSingleton.getInstance();}
+		catch (UnknownHostException e) {e.printStackTrace();}
 	}
 	
 	public static String crawlSearchWord = "default";
@@ -57,13 +63,19 @@ public class CrawlerController {
 		//Deal with equivalencies
 		HashMap<String, String> equivalencies = Equivalencies.getInstance().getEquivalencies();
 		for(String skill1 : equivalencies.keySet()) {
+			//System.out.println("skill1:"+skill1+" skill2:"+equivalencies.get(skill1));
 			counts.put(skill1, counts.get(skill1)+counts.get(equivalencies.get(skill1)));
 			counts.remove(equivalencies.get(skill1));
 		}
 		
-		System.out.println("Number of java hits"+counts.get(searchTerm));
+		System.out.println("Number of search term hits"+counts.get(searchTerm));
+
 		for(String skill : counts.keySet()) {
-			ratios.put(skill, (double)counts.get(skill)/(double)counts.get(searchTerm));
+			if(Pages.getInstance().getPages().size()==0) {
+				ratios.put(skill, 0d);
+			} else {
+				ratios.put(skill, (double)counts.get(skill)/Pages.getInstance().getPages().size());
+			}
 		}
 		//Find the top 10 ratios
 		Map<String, Double> sortedRatios = sortByComparator(ratios);
@@ -74,7 +86,16 @@ public class CrawlerController {
 			if(i>=11)
 				break;
 		}
+		
 		results.remove(searchTerm);
+		
+		//DATABASE CODE
+		//Add SearchWord-skill to DB with Map of corresponding skills
+		BasicDBObject objectToAdd = new BasicDBObject();
+		objectToAdd.append("skill", crawlSearchWord);
+		objectToAdd.append("associates", results.toString());
+		db.addToCollection("relatedSkills", objectToAdd);
+				
 		return results;
 	}
 
@@ -110,19 +131,25 @@ public class CrawlerController {
         CrawlConfig config = new CrawlConfig();
         config.setCrawlStorageFolder(crawlStorageFolder);
         config.setPolitenessDelay(1000);
-        config.setMaxPagesToFetch(20);
+        config.setMaxPagesToFetch(10);
 
        
         PageFetcher pageFetcher = new PageFetcher(config);
         RobotstxtConfig robotstxtConfig = new RobotstxtConfig();
         RobotstxtServer robotstxtServer = new RobotstxtServer(robotstxtConfig, pageFetcher);
-        CrawlController controller = new CrawlController(config, pageFetcher, robotstxtServer);
+        CrawlController controller = new CrawlController(config, pageFetcher, robotstxtServer);      
         
-
-        controller.addSeed("https://www.workopolis.com/jobsearch/find-jobs?&st=RELEVANCE&ak=" + searchword + "&l=canada&&pn=1");
-        //controller.addSeed("https://www.monster.ca/jobs/search/?q=" + searchword + "&where=canada");
-		//controller.addSeed("https://www.eluta.ca/search?q=java&l=ON&qc=");
-		//controller.addSeed("https://www.eluta.ca/search?q=java&l=BC&qc=");
+        if(searchword.equals("c++")){
+        	controller.addSeed("https://www.workopolis.com/jobsearch/find-jobs?&st=RELEVANCE&ak=" + "c%2B%2B" + "&l=canada&&pn=1");
+        	controller.addSeed("https://www.jobboom.com/en/job/" + "c%2B%2B" + "_canada/_k-1?dk=" + "c%2B%2B" + "&location=canada&defaultDistance=true");
+        	//controller.addSeed("https://www.jobboom.com/en/job/c_canada/_k-1?dk=" + searchword + "&location=canada");
+        	controller.addSeed("https://www.monster.ca/jobs/search/?q=" + "c__2B__2B" + "&where=canada");
+        }else{
+        	controller.addSeed("https://www.workopolis.com/jobsearch/find-jobs?&st=RELEVANCE&ak=" + searchword + "&l=canada&&pn=1");
+        //	controller.addSeed("https://www.jobboom.com/en/job/" + searchword + "_canada/_k-1?dk=" + searchword + "&location=canada&defaultDistance=true");
+        	controller.addSeed("https://www.jobboom.com/en/job/c_canada/_k-1?dk=" + searchword + "&location=canada");
+        	controller.addSeed("https://www.monster.ca/jobs/search/?q=" + searchword + "&where=canada");
+        }
         
         controller.start(MyCrawler.class, numberOfCrawlers);
 	}
@@ -147,12 +174,62 @@ public class CrawlerController {
 		Date startdate = new Date();
 		System.out.println(dateFormat.format(startdate));	
 		CrawlerController cc = new CrawlerController();
-		Map<String, Double> results = cc.getResults("java"); //TODO this is a stub until the actual crawling gets done
-		System.out.println("The top ten skills are:");
-		for(String skill : results.keySet()) {
-			System.out.println("Skill: "+skill+" Percent:"+results.get(skill)*100);
-		}		
-		Date date = new Date();
-		System.out.println(dateFormat.format(date));	
+		//cc.getResults("java");
+		//List of skills
+		//
+		
+		
+		List<String> automate = new ArrayList<String>();
+		automate.add("natural language processing");
+
+		//c++ everything that follows must be recoded and then redone
+		//sql server
+		//objective c 
+		//chart js
+		//tcp/ip
+		//web/db
+		//crystal reports
+		//angular js
+		//google protocol buffers
+		//visual studio
+		//android studio
+		//apache spark
+		//unreal engine
+		//natural language processing
+		//netconf/yang
+		//asp net
+		//vb net
+		//pl-sql
+		//fraud managment
+		//handlebar - why is this giving a bad result?
+		//dom ?? - html - 104.545454545%
+		//bootstrap - html - 107.3%
+		//macos - windows 140%
+		//scipy -python 109%
+		//yocto - linux 128.6%
+		//j2ee - java 105%
+		//maven - java 116%
+		//jquery - css 104%
+		//grunt - javascript 182%
+		//qml - c++ 154.5%
+		//jpa - java 135.3%
+		//ceph - html 240%
+		//scrum - agile 102.9%
+		//servlets - java 222.2%
+		//scikit - python 600%
+		
+		for(String searchSk : automate) {
+			Pages.getInstance().reset();
+			MyCrawler.urls = new HashSet<String>();
+			Map<String, Double> results = cc.getResults(searchSk); //TODO this is a stub until the actual crawling gets done
+			System.out.println("Searching: "+searchSk);
+			System.out.println("The top ten skills are:");
+			for(String skill : results.keySet()) {
+				System.out.println("Skill: "+skill+" Percent:"+results.get(skill)*100);
+			}		
+			Date date = new Date();
+			System.out.println(dateFormat.format(date));				
+		}
+		
 	}
 }

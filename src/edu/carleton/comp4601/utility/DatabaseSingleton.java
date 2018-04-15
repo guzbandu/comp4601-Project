@@ -5,6 +5,8 @@ import java.net.UnknownHostException;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
+import com.mongodb.DBCursor;
+import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
 
 public class DatabaseSingleton {
@@ -42,8 +44,37 @@ public class DatabaseSingleton {
 	}
 		
 	public synchronized void addToCollection(String collectionName, BasicDBObject objectToAdd) {
-		getCollection(collectionName).insert(objectToAdd);
+		DBCollection coll = getCollection(collectionName);
+		
+		//Step ONE: see if it object already exists
+		 BasicDBObject query = new BasicDBObject().append("skill", objectToAdd.get("skill"));
+		 BasicDBObject result = findObject(collectionName, query);
+		
+		//IT EXISTS: Update
+		if(result != null) { 
+			BasicDBObject searchQuery = new BasicDBObject().append("skill", objectToAdd.getString("skill"));
+			coll.update(searchQuery, objectToAdd);
+		 
+		 }
+		 
+		//IT IS NEW: Add
+		 else{
+			 getCollection(collectionName).insert(objectToAdd); 
+		 }
+		 
+       
+		
+		
 	}
+	
+	public synchronized BasicDBObject findObject(String collectionName, BasicDBObject document){
+		BasicDBObject obj = (BasicDBObject)getCollection(collectionName).findOne(document);
+		if(obj == null)
+			return null;
+		return obj;
+	}
+	
+	
 	
 	public synchronized void closeConnection() {
 		dbClient.close();
