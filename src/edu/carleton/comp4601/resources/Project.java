@@ -82,5 +82,26 @@ public class Project {
         }
         return response;			
 	}
+	
+	//@GET
+	//@Path("db/skill")
+	//@Produces(MediaType.APPLICATION_JSON)
+	//public Response getTopTenRelatedSkillsFromDB(
+	//		@PathParam("skill")	String	searchTerm) {
+	//	JSONObject object = null;
+     //   Response response = null;
+     //   try {
+       // 	object =  new JSONObject();
+        	//
+        	//Map<String, Double> results = cc.getResults(searchTerm);
+        	//for(String skill : results.keySet()) {
+        	//	object.put(skill, results.get(skill));
+        	//}
+        	//response = Response.status(Status.OK).entity(object.toString()).build();
+        //} catch (Exception e) {
+         //   System.out.println("error=" + e.getMessage());
+       // }
+       // return response;			
+	//}
 
 }
