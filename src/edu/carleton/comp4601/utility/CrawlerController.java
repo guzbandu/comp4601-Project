@@ -16,9 +16,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import com.mongodb.BasicDBObject;
-import com.mongodb.DBCollection;
-import com.mongodb.DBCursor;
-import com.mongodb.DBObject;
 
 import edu.carleton.comp4601.dao.Equivalencies;
 import edu.carleton.comp4601.dao.Skills;
@@ -68,10 +65,10 @@ public class CrawlerController {
 			counts.remove(equivalencies.get(skill1));
 		}
 		
-		System.out.println("Number of search term hits"+counts.get(searchTerm));
+		System.out.println("Number of search term hits"+Pages.getInstance().getPages().size());
 
 		for(String skill : counts.keySet()) {
-			if(Pages.getInstance().getPages().size()==0) {
+			if(counts.get(searchTerm)!=null&&counts.get(searchTerm)==0) {
 				ratios.put(skill, 0d);
 			} else {
 				ratios.put(skill, (double)counts.get(skill)/Pages.getInstance().getPages().size());
@@ -150,7 +147,6 @@ public class CrawlerController {
         	controller.addSeed("https://www.jobboom.com/en/job/c_canada/_k-1?dk=" + searchword + "&location=canada");
         	controller.addSeed("https://www.monster.ca/jobs/search/?q=" + searchword + "&where=canada");
         }
-        
         controller.start(MyCrawler.class, numberOfCrawlers);
 	}
 	
@@ -180,47 +176,35 @@ public class CrawlerController {
 		
 		
 		List<String> automate = new ArrayList<String>();
-		automate.add("natural language processing");
+		automate.add("dom");
+		automate.add("bootstrap");
+		automate.add("macos");
+		automate.add("scipy");
+		automate.add("yocto");
 
-		//c++ everything that follows must be recoded and then redone
-		//sql server
-		//objective c 
-		//chart js
-		//tcp/ip
+		//tcp/ip everything that follows must be recoded and then redone
 		//web/db
-		//crystal reports
-		//angular js
-		//google protocol buffers
-		//visual studio
-		//android studio
-		//apache spark
-		//unreal engine
-		//natural language processing
 		//netconf/yang
-		//asp net
-		//vb net
 		//pl-sql
-		//fraud managment
-		//handlebar - why is this giving a bad result?
-		//dom ?? - html - 104.545454545%
-		//bootstrap - html - 107.3%
-		//macos - windows 140%
-		//scipy -python 109%
-		//yocto - linux 128.6%
-		//j2ee - java 105%
-		//maven - java 116%
-		//jquery - css 104%
-		//grunt - javascript 182%
-		//qml - c++ 154.5%
-		//jpa - java 135.3%
-		//ceph - html 240%
-		//scrum - agile 102.9%
-		//servlets - java 222.2%
-		//scikit - python 600%
+
+		//j2ee
+		//maven 
+		//jquery
+		//grunt 
+		//qml 
+		//jpa 
+		//ceph
+		//scrum
+		//servlets
+		//scikit 
+		//d3 js
 		
 		for(String searchSk : automate) {
 			Pages.getInstance().reset();
 			MyCrawler.urls = new HashSet<String>();
+			MyCrawler.setM = new HashSet<Integer>();
+			MyCrawler.setJ = new HashSet<Integer>();
+			MyCrawler.set = new HashSet<Integer>();
 			Map<String, Double> results = cc.getResults(searchSk); //TODO this is a stub until the actual crawling gets done
 			System.out.println("Searching: "+searchSk);
 			System.out.println("The top ten skills are:");
