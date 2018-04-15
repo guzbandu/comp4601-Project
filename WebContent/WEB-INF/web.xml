@@ -18,6 +18,10 @@
       <servlet-name>COMP4601-Project</servlet-name>
       <url-pattern>/rest/project/*</url-pattern>
    </servlet-mapping>
+   <servlet-mapping>
+    <servlet-name>COMP4601-Project</servlet-name>
+    <url-pattern>/*</url-pattern>
+  </servlet-mapping> 
    <error-page>
       <error-code>500</error-code>
       <location>/general_error.html</location>
@@ -30,4 +34,7 @@
 		<filter-name>CorsFilter</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
+	<welcome-file-list>
+        <welcome-file>index.html</welcome-file>
+    </welcome-file-list>
 </web-app>
