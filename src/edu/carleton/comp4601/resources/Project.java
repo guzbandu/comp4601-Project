@@ -78,7 +78,8 @@ public class Project {
         try {
         	object =  new JSONObject();
         	CrawlerController cc = new CrawlerController();
-        	Map<String, Double> results = cc.getResults(searchTerm, true);
+        	String result = java.net.URLDecoder.decode(searchTerm, "UTF-8");
+        	Map<String, Double> results = cc.getResults(result, true);
         	for(String skill : results.keySet()) {
         		object.put(skill, results.get(skill));
         	}
@@ -99,7 +100,8 @@ public class Project {
         Response response = null;
         try {
         	object =  new JSONObject();
-        	Map<String, Double> relatedSkills = RelatedSkills.getInstance().getRelatedSkills(searchTerm);
+        	String result = java.net.URLDecoder.decode(searchTerm, "UTF-8");
+        	Map<String, Double> relatedSkills = RelatedSkills.getInstance().getRelatedSkills(result);
         	for(String skill : relatedSkills.keySet()) {
         		object.put(skill, relatedSkills.get(skill));
         	}

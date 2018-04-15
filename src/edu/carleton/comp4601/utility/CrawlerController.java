@@ -150,17 +150,14 @@ public class CrawlerController {
         RobotstxtServer robotstxtServer = new RobotstxtServer(robotstxtConfig, pageFetcher);
         CrawlController controller = new CrawlController(config, pageFetcher, robotstxtServer);      
         
-        if(searchword.equals("c++")){
-        	controller.addSeed("https://www.workopolis.com/jobsearch/find-jobs?&st=RELEVANCE&ak=" + "c%2B%2B" + "&l=canada&&pn=1");
-        	controller.addSeed("https://www.jobboom.com/en/job/" + "c%2B%2B" + "_canada/_k-1?dk=" + "c%2B%2B" + "&location=canada&defaultDistance=true");
-        	//controller.addSeed("https://www.jobboom.com/en/job/c_canada/_k-1?dk=" + searchword + "&location=canada");
-        	controller.addSeed("https://www.monster.ca/jobs/search/?q=" + "c__2B__2B" + "&where=canada");
-        }else{
-        	controller.addSeed("https://www.workopolis.com/jobsearch/find-jobs?&st=RELEVANCE&ak=" + searchword + "&l=canada&&pn=1");
+        String searchwordutf8 = java.net.URLEncoder.encode(searchword, "UTF-8");
+        String searchwordmonster = searchwordutf8.replaceAll("\\%", "\\_");
+        searchwordmonster = searchwordutf8.replaceAll("\\%", "__");
+        System.out.println("UTF-8:"+searchwordutf8+" ASCII:"+searchwordmonster);
+        controller.addSeed("https://www.workopolis.com/jobsearch/find-jobs?&st=RELEVANCE&ak=" + searchwordutf8 + "&l=canada&&pn=1");
         //	controller.addSeed("https://www.jobboom.com/en/job/" + searchword + "_canada/_k-1?dk=" + searchword + "&location=canada&defaultDistance=true");
-        	controller.addSeed("https://www.jobboom.com/en/job/c_canada/_k-1?dk=" + searchword + "&location=canada");
-        	controller.addSeed("https://www.monster.ca/jobs/search/?q=" + searchword + "&where=canada");
-        }
+        controller.addSeed("https://www.jobboom.com/en/job/c_canada/_k-1?dk=" + searchwordutf8 + "&location=canada");
+        controller.addSeed("https://www.monster.ca/jobs/search/?q=" + searchwordmonster + "&where=canada");
         controller.start(MyCrawler.class, numberOfCrawlers);
 	}
 	
@@ -187,22 +184,22 @@ public class CrawlerController {
 		
 		
 		List<String> automate = new ArrayList<String>();
-		automate.add("dom");
-		automate.add("bootstrap");
-		automate.add("macos");
-		automate.add("scipy");
-		automate.add("yocto");
+		automate.add("c++");
+		//automate.add("");
+		//automate.add("");
+		//automate.add("");
+		//automate.add("");
 
 		//tcp/ip everything that follows must be recoded and then redone
 		//web/db
 		//netconf/yang
 		//pl-sql
 
-		//j2ee
-		//maven 
-		//jquery
-		//grunt 
-		//qml 
+		//
+		// 
+		//
+		// 
+		// 
 		//jpa 
 		//ceph
 		//scrum
