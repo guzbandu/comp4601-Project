@@ -38,7 +38,10 @@ public class CrawlerController {
 	
 	public static String crawlSearchWord = "default";
 	
-	public Map<String, Double> getResults(String searchTerm) {
+	public Map<String, Double> getResults(String searchTerm, Boolean live) {
+		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+		Date startdate = new Date();
+		System.out.println(dateFormat.format(startdate));	
 		Pages.getInstance().reset();
 		MyCrawler.urls = new HashSet<String>();
 		MyCrawler.setM = new HashSet<Integer>();
@@ -51,7 +54,7 @@ public class CrawlerController {
 		for(String skill : Skills.getInstance().getSkills()) {
 			counts.put(skill, 0);
 		}
-		createPages(searchTerm); //TODO this is a stub where the actual crawl structure would have been created
+		createPages(searchTerm, live); //TODO this is a stub where the actual crawl structure would have been created
 		for(String url : Pages.getInstance().getPages().keySet()) {
 			HashMap<String, Boolean> skills = Pages.getInstance().getPages().get(url).getSkills();
 			for(String skill : skills.keySet()) {
@@ -97,7 +100,10 @@ public class CrawlerController {
 		objectToAdd.append("skill", crawlSearchWord);
 		objectToAdd.append("associates", results.toString());
 		db.addToCollection("relatedSkills", objectToAdd);
-				
+
+		Date date = new Date();
+		System.out.println(dateFormat.format(date));				
+
 		return results;
 	}
 
@@ -124,7 +130,7 @@ public class CrawlerController {
 	
 	//Decr: starts the craw
 	//Input: the keyword you want to search into each job website
-	private void crawl(String searchword) throws Exception{
+	private void crawl(String searchword, Boolean live) throws Exception{
 		crawlSearchWord = searchword;
 		
 		String crawlStorageFolder = System.getProperty("user.home")+"/.project/";
@@ -133,7 +139,10 @@ public class CrawlerController {
         CrawlConfig config = new CrawlConfig();
         config.setCrawlStorageFolder(crawlStorageFolder);
         config.setPolitenessDelay(1000);
-        config.setMaxPagesToFetch(10);
+        if(live)
+        	config.setMaxPagesToFetch(3);
+        else
+        	config.setMaxPagesToFetch(10);
 
        
         PageFetcher pageFetcher = new PageFetcher(config);
@@ -156,11 +165,11 @@ public class CrawlerController {
 	}
 	
 	
-	private void createPages(String searchTerm) {
+	private void createPages(String searchTerm, Boolean live) {
 		//System.out.println("createPage");
 		//Step One: crawl to get the links of all the jobs pages
 		try {
-			crawl(searchTerm);
+			crawl(searchTerm, live);
 		} catch (Exception e) {e.printStackTrace();}
 		
 		
@@ -171,9 +180,6 @@ public class CrawlerController {
 	
 	public static void main(String[] args) {
 		//System.out.println("!!!!!!!!!!LETS GO");
-		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-		Date startdate = new Date();
-		System.out.println(dateFormat.format(startdate));	
 		CrawlerController cc = new CrawlerController();
 		//cc.getResults("java");
 		//List of skills
@@ -205,14 +211,12 @@ public class CrawlerController {
 		//d3 js
 		
 		for(String searchSk : automate) {
-			Map<String, Double> results = cc.getResults(searchSk); //TODO this is a stub until the actual crawling gets done
+			Map<String, Double> results = cc.getResults(searchSk, false); //TODO this is a stub until the actual crawling gets done
 			System.out.println("Searching: "+searchSk);
 			System.out.println("The top ten skills are:");
 			for(String skill : results.keySet()) {
 				System.out.println("Skill: "+skill+" Percent:"+results.get(skill)*100);
 			}		
-			Date date = new Date();
-			System.out.println(dateFormat.format(date));				
 		}
 		
 	}

@@ -1,6 +1,9 @@
 //Sahaj Arora 100961220 Luke Daschko 100976007 Jennifer Franklin 100315764
 package edu.carleton.comp4601.resources;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -75,7 +78,7 @@ public class Project {
         try {
         	object =  new JSONObject();
         	CrawlerController cc = new CrawlerController();
-        	Map<String, Double> results = cc.getResults(searchTerm);
+        	Map<String, Double> results = cc.getResults(searchTerm, true);
         	for(String skill : results.keySet()) {
         		object.put(skill, results.get(skill));
         	}
@@ -83,6 +86,7 @@ public class Project {
         } catch (Exception e) {
             System.out.println("error=" + e.getMessage());
         }
+				
         return response;			
 	}
 	
