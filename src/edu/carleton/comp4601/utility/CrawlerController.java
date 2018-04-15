@@ -39,6 +39,11 @@ public class CrawlerController {
 	public static String crawlSearchWord = "default";
 	
 	public Map<String, Double> getResults(String searchTerm) {
+		Pages.getInstance().reset();
+		MyCrawler.urls = new HashSet<String>();
+		MyCrawler.setM = new HashSet<Integer>();
+		MyCrawler.setJ = new HashSet<Integer>();
+		MyCrawler.set = new HashSet<Integer>();
 		System.out.println("getResults");
 		Map<String, Double> results = new LinkedHashMap<String, Double>();
 		Map<String, Double> ratios = new LinkedHashMap<String, Double>();
@@ -200,11 +205,6 @@ public class CrawlerController {
 		//d3 js
 		
 		for(String searchSk : automate) {
-			Pages.getInstance().reset();
-			MyCrawler.urls = new HashSet<String>();
-			MyCrawler.setM = new HashSet<Integer>();
-			MyCrawler.setJ = new HashSet<Integer>();
-			MyCrawler.set = new HashSet<Integer>();
 			Map<String, Double> results = cc.getResults(searchSk); //TODO this is a stub until the actual crawling gets done
 			System.out.println("Searching: "+searchSk);
 			System.out.println("The top ten skills are:");
