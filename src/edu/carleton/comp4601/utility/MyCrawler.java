@@ -23,7 +23,7 @@ public class MyCrawler extends WebCrawler {
 
 	static Set<Integer> set = new HashSet<Integer>();
 	static Set<Integer> setM = new HashSet<Integer>();
-	static Set<Integer> setI = new HashSet<Integer>();
+	static Set<Integer> setJ = new HashSet<Integer>();
 	
 	static Set<String> urls = new HashSet<String>();
 	
@@ -42,7 +42,7 @@ public class MyCrawler extends WebCrawler {
                                                            + "|png|mp3|mp4|zip|gz))$");
 
    //turns testing prints on/off
-   boolean detail = true;
+   boolean detail = false;
     /**
      * This method receives two parameters. The first parameter is the page
      * in which we have discovered this new url and the second parameter is
@@ -103,11 +103,11 @@ public class MyCrawler extends WebCrawler {
         		 }
         		 if(detail==true){System.out.println("Job boom HIT: " + pagenumber);}
         		 
-             	if(set.contains(pagenumber)){
+             	if(setJ.contains(pagenumber)){
              		repeat = true;
              	} else{
              		repeat = false;
-             		set.add(pagenumber);
+             		setJ.add(pagenumber);
              	}
              
         	 }
