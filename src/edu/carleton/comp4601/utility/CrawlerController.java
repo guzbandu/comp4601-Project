@@ -59,7 +59,7 @@ public class CrawlerController {
 		//Deal with equivalencies
 		HashMap<String, String> equivalencies = Equivalencies.getInstance().getEquivalencies();
 		for(String skill1 : equivalencies.keySet()) {
-			System.out.println("skill1:"+skill1+" skill2:"+equivalencies.get(skill1));
+			//System.out.println("skill1:"+skill1+" skill2:"+equivalencies.get(skill1));
 			counts.put(skill1, counts.get(skill1)+counts.get(equivalencies.get(skill1)));
 			counts.remove(equivalencies.get(skill1));
 		}
@@ -67,10 +67,10 @@ public class CrawlerController {
 		System.out.println("Number of search term hits"+counts.get(searchTerm));
 
 		for(String skill : counts.keySet()) {
-			if(counts.get(searchTerm)==0) {
+			if(Pages.getInstance().getPages().size()==0) {
 				ratios.put(skill, 0d);
 			} else {
-				ratios.put(skill, (double)counts.get(skill)/(double)counts.get(searchTerm));
+				ratios.put(skill, (double)counts.get(skill)/Pages.getInstance().getPages().size());
 			}
 		}
 		//Find the top 10 ratios
@@ -138,7 +138,7 @@ public class CrawlerController {
 
         controller.addSeed("https://www.workopolis.com/jobsearch/find-jobs?&st=RELEVANCE&ak=" + searchword + "&l=canada&&pn=1");
         controller.addSeed("https://www.monster.ca/jobs/search/?q=" + searchword + "&where=canada");
-        controller.addSeed("https://www.jobboom.com/en/job/" + searchword + "_canada/_k-1?dk=" + searchword + "&location=canada&defaultDistance=true");;       
+        controller.addSeed("https://www.jobboom.com/en/job/c_canada/_k-1?dk=" + searchword + "&location=canada");       
         
         controller.start(MyCrawler.class, numberOfCrawlers);
 	}
@@ -167,116 +167,43 @@ public class CrawlerController {
 		//List of skills
 		//
 		List<String> automate = new ArrayList<String>();
-		//automate.add("c++");
-		//automate.add("tomcat");
-		//automate.add("react");
-		//automate.add("ip security");
-		automate.add("kanban");
-		//automate.add("sass");
-		//automate.add("wcf");
-		automate.add("foxpro");
+		automate.add("natural language processing");
 
-		//gtk
-		//azure
-		//python
-		//d3 js
-		//ip
-		//caffe
-		//dns
-		//objective c
-		//akka
+		//c++ everything that follows must be recoded and then redone
 		//sql server
-		//microstrategy
-		//angular
-		//struts
-		//kafka
-		//handlebar
-		//hive
-		//artifactory
-		//dom
-		//openshift
-		//bootstrap
-		//tensorflow
-		//maf
+		//objective c 
 		//chart js
-		//jenkins
-		//pl-sql
-		//macos
-		//scipy
-		//sonarqube
-		//jsoup
-		//excel
-		//pandas
-		//pivotal
-		//netconf/yang
-		//php
-		//yarn
-		//cucumber
-		//circleci
-		//vb net
 		//tcp/ip
-		//pig
-		//jms
-		//natural langauge processing
-		//webpack
-		//yocto
-		//apache spark
-		//asp net
-		//j2ee
-		//html
-		//orientdb
-		//etl
-		//adworks
-		//unreal engine
-		//jira
-		//matlab
-		//angular js
-		//maven
-		//android studio
-		//visual studio
-		//maya
-		//google protocol buffers
-		//angularjs
-		//soap
-		//unix
-		//elixir
-		//samza
-		//scala
-		//crystal reports
-		//jade
-		//firebasemessaging
-		//jquery
-		//sql
-		//grunt
-		//qml
-		//rust
-		//unity
-		//git
-		//postgresql
 		//web/db
-		//jpa
-		//mongodb
-		//dhcp
-		//rest
-		//steamworks
-		//chef
-		//jeria
-		//mfc
-		//ruby
-		//puppet
-		//tableau
+		//crystal reports
+		//angular js
+		//google protocol buffers
+		//visual studio
+		//android studio
+		//apache spark
+		//unreal engine
+		//natural language processing
+		//netconf/yang
+		//asp net
+		//vb net
+		//pl-sql
 		//fraud managment
-		//ceph
-		//subversion
-		//srcum
-		//servlets
-		//lua
-		//qnx
-		//vuejs
-		//xslt
-		//aws
-		//scikit
-		//opencv
+		//handlebar - why is this giving a bad result?
+		//dom ?? - html - 104.545454545%
+		//bootstrap - html - 107.3%
+		//macos - windows 140%
+		//scipy -python 109%
+		//yocto - linux 128.6%
+		//j2ee - java 105%
+		//maven - java 116%
+		//jquery - css 104%
+		//grunt - javascript 182%
+		//qml - c++ 154.5%
+		//jpa - java 135.3%
+		//ceph - html 240%
+		//scrum - agile 102.9%
+		//servlets - java 222.2%
+		//scikit - python 600%
 		
 		for(String searchSk : automate) {
 			Pages.getInstance().reset();
