@@ -153,11 +153,11 @@ public class CrawlerController {
         String searchwordutf8 = java.net.URLEncoder.encode(searchword, "UTF-8");
         String searchwordmonster = searchwordutf8.replaceAll("\\%", "\\_");
         searchwordmonster = searchwordutf8.replaceAll("\\%", "__");
-        System.out.println("UTF-8:"+searchwordutf8+" ASCII:"+searchwordmonster);
-        controller.addSeed("https://www.workopolis.com/jobsearch/find-jobs?&st=RELEVANCE&ak=" + searchwordutf8 + "&l=canada&&pn=1");
+        //System.out.println("UTF-8:"+searchwordutf8+" ASCII:"+searchwordmonster);
+        //controller.addSeed("https://www.workopolis.com/jobsearch/find-jobs?&st=RELEVANCE&ak=" + searchwordutf8 + "&l=canada&&pn=1");
         //	controller.addSeed("https://www.jobboom.com/en/job/" + searchword + "_canada/_k-1?dk=" + searchword + "&location=canada&defaultDistance=true");
-        controller.addSeed("https://www.jobboom.com/en/job/c_canada/_k-1?dk=" + searchwordutf8 + "&location=canada");
-        controller.addSeed("https://www.monster.ca/jobs/search/?q=" + searchwordmonster + "&where=canada");
+        controller.addSeed("https://www.jobboom.com/en/job/" + searchwordutf8 + "_canada/_k-1?dk=" + searchwordutf8 + "&location=canada");
+        //controller.addSeed("https://www.monster.ca/jobs/search/?q=" + searchwordmonster + "&where=canada");
         controller.start(MyCrawler.class, numberOfCrawlers);
 	}
 	
@@ -184,7 +184,7 @@ public class CrawlerController {
 		
 		
 		List<String> automate = new ArrayList<String>();
-		automate.add("jpa");
+		automate.add("java");
 		//automate.add("ceph");
 		//automate.add("scrum");
 		//automate.add("servlets");
@@ -194,6 +194,24 @@ public class CrawlerController {
 		//automate.add("web/dbs");
 		//automate.add("netconf/yang");
 		//automate.add("pl-sql");
+		
+		//missing skill: c#
+		//missing skill: objective-c
+		//missing skill: html5
+		//missing skill: svn
+		//missing skill: pl sql
+		//missing skill: jee
+		//missing skill: t-sql
+		//missing skill: asp net
+		//missing skill: fraud managment
+		//missing skill: web/db
+		//missing skill: vb net
+		//missing skill: handlebar
+		//missing skill: pl/sql
+		//missing skill: c# net
+		//missing skill: java spark
+		//missing skill: css3
+		//missing skill: unreal engine
 		
 		for(String searchSk : automate) {
 			Map<String, Double> results = cc.getResults(searchSk, false); //TODO this is a stub until the actual crawling gets done
