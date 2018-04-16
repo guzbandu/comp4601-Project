@@ -1,12 +1,7 @@
 //Sahaj Arora 100961220 Luke Daschko 100976007 Jennifer Franklin 100315764
 package edu.carleton.comp4601.resources;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 import javax.ws.rs.GET;

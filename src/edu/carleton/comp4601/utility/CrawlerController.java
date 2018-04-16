@@ -184,28 +184,16 @@ public class CrawlerController {
 		
 		
 		List<String> automate = new ArrayList<String>();
-		automate.add("c++");
-		//automate.add("");
-		//automate.add("");
-		//automate.add("");
-		//automate.add("");
-
-		//tcp/ip everything that follows must be recoded and then redone
-		//web/db
-		//netconf/yang
-		//pl-sql
-
-		//
-		// 
-		//
-		// 
-		// 
-		//jpa 
-		//ceph
-		//scrum
-		//servlets
-		//scikit 
-		//d3 js
+		automate.add("jpa");
+		//automate.add("ceph");
+		//automate.add("scrum");
+		//automate.add("servlets");
+		//automate.add("scikit");
+		//automate.add("d3 js");
+		//automate.add("tcp/ip");
+		//automate.add("web/dbs");
+		//automate.add("netconf/yang");
+		//automate.add("pl-sql");
 		
 		for(String searchSk : automate) {
 			Map<String, Double> results = cc.getResults(searchSk, false); //TODO this is a stub until the actual crawling gets done
