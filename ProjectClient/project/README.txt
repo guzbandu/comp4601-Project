@@ -10,7 +10,8 @@ LAUNCH INSTRUCTIONS
 
 1. Make sure Node is installed on your system. This app has been tested on Node version v8.9.4.
 2. Make sure ionic and cordova are installed on your system. It can be installed by running the command "npm install -g ionic cordova".
-3. In the terminal, navigate to the root of this project (/ProjectClient/project), and run the following command to launch this app in a browser: "ionic cordova run browser".
+3. In the terminal, navigate to the root of this project (/ProjectClient/project), and run the following command to download the required modules: "npm install".
+4. In the terminal, navigate to the root of this project (/ProjectClient/project), and run the following command to launch this app in a browser: "ionic cordova run browser".
    This command launches a static file server at a URL like "http://localhost:8003/index.html". Your URL might be different than this. You can check the URL in the output within the terminal.
    Look for the line that reads "Satic file server running @ ...".
    If the app did not automatically open up in a browser, then open a browser, enter the static file server URL (obtained from the output in terminal) and hit Enter.
