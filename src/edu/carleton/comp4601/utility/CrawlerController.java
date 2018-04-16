@@ -140,11 +140,12 @@ public class CrawlerController {
         config.setCrawlStorageFolder(crawlStorageFolder);
         config.setPolitenessDelay(1000);
         if(live)
-        	config.setMaxPagesToFetch(3);
+        	config.setMaxPagesToFetch(200);
         else
-        	config.setMaxPagesToFetch(10);
-
-       
+        	config.setMaxPagesToFetch(200);
+        
+        
+        crawlSearchWord = searchword;
         PageFetcher pageFetcher = new PageFetcher(config);
         RobotstxtConfig robotstxtConfig = new RobotstxtConfig();
         RobotstxtServer robotstxtServer = new RobotstxtServer(robotstxtConfig, pageFetcher);
@@ -184,7 +185,7 @@ public class CrawlerController {
 		
 		
 		List<String> automate = new ArrayList<String>();
-		automate.add("");
+		automate.add("java");
 
 				
 		for(String searchSk : automate) {
