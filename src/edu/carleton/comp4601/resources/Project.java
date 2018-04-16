@@ -65,16 +65,16 @@ public class Project {
 	}
 	
 	@GET
-	@Path("query/{skill}")
+	@Path("query/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getTopTenRelatedSkills(
-			@PathParam("skill")	String	searchTerm) {
+			@PathParam("id")	String	searchTerm) {
 		JSONObject object = null;
         Response response = null;
         try {
         	object =  new JSONObject();
         	CrawlerController cc = new CrawlerController();
-        	String result = java.net.URLDecoder.decode(searchTerm, "UTF-8");
+        	String result = Skills.getInstance().getSkill(searchTerm);
         	Map<String, Double> results = cc.getResults(result, true);
         	for(String skill : results.keySet()) {
         		object.put(skill, results.get(skill));

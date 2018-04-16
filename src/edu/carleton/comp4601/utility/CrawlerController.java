@@ -142,7 +142,7 @@ public class CrawlerController {
         if(live)
         	config.setMaxPagesToFetch(200);
         else
-        	config.setMaxPagesToFetch(200);
+        	config.setMaxPagesToFetch(500);
         
         
         crawlSearchWord = searchword;
@@ -154,7 +154,7 @@ public class CrawlerController {
         String searchwordutf8 = java.net.URLEncoder.encode(searchword, "UTF-8");
         String searchwordmonster = searchwordutf8.replaceAll("\\%", "\\_");
         searchwordmonster = searchwordutf8.replaceAll("\\%", "__");
-        //System.out.println("UTF-8:"+searchwordutf8+" ASCII:"+searchwordmonster);
+        System.out.println("UTF-8:"+searchwordutf8+" monster:"+searchwordmonster);
         //controller.addSeed("https://www.workopolis.com/jobsearch/find-jobs?&st=RELEVANCE&ak=" + searchwordutf8 + "&l=canada&&pn=1");
         //	controller.addSeed("https://www.jobboom.com/en/job/" + searchword + "_canada/_k-1?dk=" + searchword + "&location=canada&defaultDistance=true");
         controller.addSeed("https://www.jobboom.com/en/job/" + searchwordutf8 + "_canada/_k-1?dk=" + searchwordutf8 + "&location=canada");

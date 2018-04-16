@@ -169,7 +169,7 @@ public class MyCrawler extends WebCrawler {
     	 this.getMyController().getConfig().setPolitenessDelay(new Long(endCrawlTime).intValue());
 
          String url = page.getWebURL().getURL();
-        System.out.println("- - - - - - - - - - -  - - - - - - - - \n Search page URL: " + url + "\n - - - - - - - - - - -  - - - - - - - -");
+        if(detail) {System.out.println("- - - - - - - - - - -  - - - - - - - - \n Search page URL: " + url + "\n - - - - - - - - - - -  - - - - - - - -");}
 
          //Step ZERO: Basic Parsing...
          if (page.getParseData() instanceof HtmlParseData) {
