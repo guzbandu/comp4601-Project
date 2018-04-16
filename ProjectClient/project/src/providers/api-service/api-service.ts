@@ -39,14 +39,14 @@ export class ApiServiceProvider {
   }
 
   // Get Relevant skills
-  getRelevantSkills(skill: string, queryType: string): Promise<any> {
+  getRelevantSkills(skillId: string, queryType: string): Promise<any> {
     var me = this;
-    var url = me.apiUrl + "/" + queryType + "/" + encodeURIComponent(skill)
+    var url = me.apiUrl + "/" + queryType + "/" + encodeURIComponent(skillId)
     console.log("calling url: " + url)
-    console.log("getting RelevantSkills for skill: " + skill)
+    console.log("getting RelevantSkills for skill ID: " + skillId)
     return me.http.get(url).toPromise()
       .then((res: any) => {
-        console.log("response from API call to /" + queryType + "/" + skill + ":")
+        console.log("response from API call to /" + queryType + "/" + skillId + ":")
         console.log(res)
         // Convert the response body to json and return
         let body = res.json()
@@ -54,7 +54,7 @@ export class ApiServiceProvider {
       })
       .catch(error => {
 
-        console.log("error from API call to /" + queryType + "/" + skill + ":")
+        console.log("error from API call to /" + queryType + "/" + skillId + ":")
         console.log(error)
         return error
       });

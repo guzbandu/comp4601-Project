@@ -8,8 +8,8 @@ import { Skill } from '../../models/Skill';
   templateUrl: 'home.html'
 })
 export class HomePage {
-  skills: string[] = []
-  skill: string;
+  skills: Skill[] = []
+  skill: Skill;
   loading;
   readonly queryTypes = {
     DATABASE: "db",
@@ -21,6 +21,10 @@ export class HomePage {
     this.getAllSkills()
   }
 
+  comapreSkillsFn(a: Skill, b: Skill) {
+    return a && b ? a.id === b.id : false;
+  }
+
   getAllSkills() {
     let me = this;
     me.presentLoading('Getting ready. Please wait...');
@@ -30,12 +34,15 @@ export class HomePage {
 
       // Parse skills json response
       Object.keys(result).forEach((key, index) => {
-        me.skills.push(result[key])
+        var skill: Skill = new Skill()
+        skill.id = key
+        skill.name = result[key]
+        me.skills.push(skill)
       })
 
-      me.skills.sort((a: string, b: string) => {
-        if (a.toLocaleLowerCase() < b.toLocaleLowerCase()) return -1;
-        if (a.toLocaleLowerCase() > b.toLocaleLowerCase()) return 1;
+      me.skills.sort((a: Skill, b: Skill) => {
+        if (a.name.toLocaleLowerCase() < b.name.toLocaleLowerCase()) return -1;
+        if (a.name.toLocaleLowerCase() > b.name.toLocaleLowerCase()) return 1;
         return 0;
       })
 
@@ -66,7 +73,7 @@ export class HomePage {
       message = "Finding relevant skills using live crawl. This might take a while..."
     }
     me.presentLoading('Finding skills...');
-    me.apiService.getRelevantSkills(me.skill, queryType).then((result) => {
+    me.apiService.getRelevantSkills(me.skill.id, queryType).then((result) => {
       console.log("response from getRelevantSkills:")
       console.log(result)
       // Parse relevant skills json response
