@@ -1,20 +1,11 @@
 package edu.carleton.comp4601.dao;
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import com.mongodb.BasicDBObject;
-import com.mongodb.DBCollection;
-import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
 
-import edu.carleton.comp4601.model.Equivalence;
 import edu.carleton.comp4601.utility.DatabaseSingleton;
 
 public class RelatedSkills {
@@ -30,8 +21,9 @@ public class RelatedSkills {
 
 	}
 
-	public Map<String, Double> getRelatedSkills(String skill) {
-		System.out.println(skill);
+	public Map<String, Double> getRelatedSkills(String id) {
+		System.out.println(id);
+		String skill = Skills.getInstance().getSkill(id);
 		Map<String, Double> relatedSkills = new LinkedHashMap<String, Double>();
 		try {
 			BasicDBObject basicdbobj = new BasicDBObject();

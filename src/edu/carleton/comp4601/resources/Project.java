@@ -1,6 +1,7 @@
 //Sahaj Arora 100961220 Luke Daschko 100976007 Jennifer Franklin 100315764
 package edu.carleton.comp4601.resources;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 
@@ -46,14 +47,14 @@ public class Project {
 	@Path("skills")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getSkillsList() {
-		HashSet<String> skills = Skills.getInstance().getSkills();
+		HashMap<String, String> skills = Skills.getInstance().getSkillsWithId();
 		JSONObject object = null;
         Response response = null;
         try {
         	object =  new JSONObject();
         	int i=0;
-        	for(String skill : skills) {
-        		object.put("Skill"+i, skill);
+        	for(String id : skills.keySet()) {
+        		object.put(id, skills.get(id));
         		i++;
         	}
         	response = Response.status(Status.OK).entity(object.toString()).build();
@@ -87,16 +88,15 @@ public class Project {
 	}
 	
 	@GET
-	@Path("db/{skill}")
+	@Path("db/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getTopTenRelatedSkillsFromDB(
-			@PathParam("skill")	String	searchTerm) {
+			@PathParam("id")	String	searchTerm) {
 		JSONObject object = null;
         Response response = null;
         try {
         	object =  new JSONObject();
-        	String result = java.net.URLDecoder.decode(searchTerm, "UTF-8");
-        	Map<String, Double> relatedSkills = RelatedSkills.getInstance().getRelatedSkills(result);
+        	Map<String, Double> relatedSkills = RelatedSkills.getInstance().getRelatedSkills(searchTerm);
         	for(String skill : relatedSkills.keySet()) {
         		object.put(skill, relatedSkills.get(skill));
         	}
