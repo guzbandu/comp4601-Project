@@ -17,7 +17,8 @@
       </select>
     </ion-item>
 
-    <button (tap)="findRelevantSkills()" margin-top ion-button block color="primary" class="block center mediumText">Find Relevant Skills</button>
+    <button (tap)="findRelevantSkills(queryTypes.DATABASE)" margin-top ion-button block color="primary" class="block center mediumText">Find Relevant Skills (Database)</button>
+    <button (tap)="findRelevantSkills(queryTypes.LIVE_CRAWL)" margin-top ion-button block color="primary" class="block center mediumText">Find Relevant Skills (Live Crawl)</button>
   </div>
 </div>
 </ion-content>

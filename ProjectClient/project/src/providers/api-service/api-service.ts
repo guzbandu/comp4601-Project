@@ -39,12 +39,12 @@ export class ApiServiceProvider {
   }
 
   // Get Relevant skills
-  getRelevantSkills(skill: string): Promise<any> {
+  getRelevantSkills(skill: string, queryType: string): Promise<any> {
     var me = this;
     console.log("getting RelevantSkills for skill: " + skill)
-    return me.http.get(me.apiUrl + "/db/" + skill).toPromise()
+    return me.http.get(me.apiUrl + "/" + queryType + "/" + skill).toPromise()
       .then((res: any) => {
-        console.log("response from API call to /db/" + skill + ":")
+        console.log("response from API call to /" + queryType + "/" + skill + ":")
         console.log(res)
         // Convert the response body to json and return
         let body = res.json()
@@ -52,7 +52,7 @@ export class ApiServiceProvider {
       })
       .catch(error => {
 
-        console.log("error from API call to /db/" + skill + ":")
+        console.log("error from API call to /" + queryType + "/" + skill + ":")
         console.log(error)
         return error
       });
