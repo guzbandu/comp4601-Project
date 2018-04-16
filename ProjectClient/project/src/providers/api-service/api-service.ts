@@ -12,7 +12,7 @@ import { Injectable } from '@angular/core';
 */
 @Injectable()
 export class ApiServiceProvider {
-  apiUrl = "http://localhost:8080/COMP4601-Project/rest/project"
+  apiUrl = "http://localhost:8011/COMP4601-Project/rest/project"
   constructor(public http: Http) {
     console.log('Hello ApiServiceProvider Provider');
   }
