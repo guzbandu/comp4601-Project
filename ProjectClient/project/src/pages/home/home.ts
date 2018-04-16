@@ -9,7 +9,7 @@ import { Skill } from '../../models/Skill';
 })
 export class HomePage {
   skills: Skill[] = []
-  skill: Skill;
+  skillId: string;
   loading;
   readonly queryTypes = {
     DATABASE: "db",
@@ -19,10 +19,6 @@ export class HomePage {
   constructor(public navCtrl: NavController, private apiService: ApiServiceProvider,
     public loadingCtrl: LoadingController) {
     this.getAllSkills()
-  }
-
-  comapreSkillsFn(a: Skill, b: Skill) {
-    return a && b ? a.id === b.id : false;
   }
 
   getAllSkills() {
@@ -48,7 +44,7 @@ export class HomePage {
 
       // Set first skill selected by default
       if (me.skills.length > 0) {
-        me.skill = me.skills[0]
+        me.skillId = me.skills[0].id
       }
 
       me.dismissLoading()
@@ -73,7 +69,8 @@ export class HomePage {
       message = "Finding relevant skills using live crawl. This might take a while..."
     }
     me.presentLoading('Finding skills...');
-    me.apiService.getRelevantSkills(me.skill.id, queryType).then((result) => {
+    
+    me.apiService.getRelevantSkills(me.skillId, queryType).then((result) => {
       console.log("response from getRelevantSkills:")
       console.log(result)
       // Parse relevant skills json response
