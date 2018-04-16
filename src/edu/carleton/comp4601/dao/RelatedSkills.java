@@ -31,6 +31,7 @@ public class RelatedSkills {
 	}
 
 	public Map<String, Double> getRelatedSkills(String skill) {
+		System.out.println(skill);
 		Map<String, Double> relatedSkills = new LinkedHashMap<String, Double>();
 		try {
 			BasicDBObject basicdbobj = new BasicDBObject();
