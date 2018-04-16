@@ -11,6 +11,10 @@ export class HomePage {
   skills: string[] = []
   skill: string;
   loading;
+  readonly queryTypes = {
+    DATABASE: "db",
+    LIVE_CRAWL: "query"
+  }
 
   constructor(public navCtrl: NavController, private apiService: ApiServiceProvider,
     public loadingCtrl: LoadingController) {
@@ -29,6 +33,12 @@ export class HomePage {
         me.skills.push(result[key])
       })
 
+      me.skills.sort((a: string, b: string) => {
+        if (a.toLocaleLowerCase() < b.toLocaleLowerCase()) return -1;
+        if (a.toLocaleLowerCase() > b.toLocaleLowerCase()) return 1;
+        return 0;
+      })
+
       // Set first skill selected by default
       if (me.skills.length > 0) {
         me.skill = me.skills[0]
@@ -45,12 +55,18 @@ export class HomePage {
     })
   }
 
-  findRelevantSkills() {
+  findRelevantSkills(queryType: string) {
     let me = this;
     var relevantSkills: Skill[] = [];
 
+    var message;
+    if (queryType == me.queryTypes.DATABASE) {
+      message = "Finding relevant skills...";
+    } else {
+      message = "Finding relevant skills using live crawl. This might take a while..."
+    }
     me.presentLoading('Finding skills...');
-    me.apiService.getRelevantSkills(me.skill).then((result) => {
+    me.apiService.getRelevantSkills(me.skill, queryType).then((result) => {
       console.log("response from getRelevantSkills:")
       console.log(result)
       // Parse relevant skills json response
@@ -59,6 +75,12 @@ export class HomePage {
         skill.name = key;
         skill.relevance = Number(result[key] * 100)
         relevantSkills.push(skill)
+      })
+
+      relevantSkills.sort((a: Skill, b: Skill) => {
+        if (a.relevance > b.relevance) return -1;
+        if (a.relevance < b.relevance) return 1;
+        return 0;
       })
 
       me.dismissLoading()
@@ -78,7 +100,7 @@ export class HomePage {
     this.loading = this.loadingCtrl.create({
       content: message
     });
-  
+
     this.loading.present();
   }
 
@@ -87,7 +109,7 @@ export class HomePage {
   }
 
   openChartPage(skills: Skill[]) {
-    this.navCtrl.push("chart", {skills: skills})
+    this.navCtrl.push("chart", { skills: skills })
   }
 
 }
