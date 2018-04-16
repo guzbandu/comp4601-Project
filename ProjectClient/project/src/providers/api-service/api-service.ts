@@ -41,8 +41,10 @@ export class ApiServiceProvider {
   // Get Relevant skills
   getRelevantSkills(skill: string, queryType: string): Promise<any> {
     var me = this;
+    var url = me.apiUrl + "/" + queryType + "/" + encodeURIComponent(skill)
+    console.log("calling url: " + url)
     console.log("getting RelevantSkills for skill: " + skill)
-    return me.http.get(me.apiUrl + "/" + queryType + "/" + skill).toPromise()
+    return me.http.get(url).toPromise()
       .then((res: any) => {
         console.log("response from API call to /" + queryType + "/" + skill + ":")
         console.log(res)

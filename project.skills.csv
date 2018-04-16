@@ -63,16 +63,16 @@
 5ac8e178c0c6f6443805dc54,mustache
 5ac8e181c0c6f6443805dc55,jade
 5ac8e18bc0c6f6443805dc56,aws
-5ac8e1aac0c6f6443805dc57,c#.net
+5ac8e1aac0c6f6443805dc57,c# net
 5ac8e220c0c6f6443805dc58,waf
 5ac8e245c0c6f6443805dc59,wcf
-5ac8e251c0c6f6443805dc5a,asp.net
+5ac8e251c0c6f6443805dc5a,asp net
 5ac8e25fc0c6f6443805dc5b,visual studio
 5ac8e27fc0c6f6443805dc5c,backbone
 5ac8e28dc0c6f6443805dc5d,bootstrap
 5ac8e297c0c6f6443805dc5e,tfs
 5ac8e2b2c0c6f6443805dc5f,maf
-5ac8e2bcc0c6f6443805dc60,vb.net
+5ac8e2bcc0c6f6443805dc60,vb net
 5ac8e2dcc0c6f6443805dc61,crystal reports
 5ac8e2f6c0c6f6443805dc62,uml
 5ac8e317c0c6f6443805dc63,xslt
@@ -110,8 +110,8 @@
 5ac8e689c0c6f6443805dc84,rust
 5ac8e699c0c6f6443805dc85,elixir
 5ac8e6d7c0c6f6443805dc87,ios
-5ac8e6dcc0c6f6443805dc88,srcum
-5ac8e6f1c0c6f6443805dc89,Objective C
+5ac8e6dcc0c6f6443805dc88,scrum
+5ac8e6f1c0c6f6443805dc89,objective c
 5ac8e705c0c6f6443805dc8a,xcode
 5ac8e71ac0c6f6443805dc8b,cocoa
 5ac8e720c0c6f6443805dc8c,core data
@@ -120,16 +120,16 @@
 5ac8e766c0c6f6443805dc8f,kanban
 5ac8e7d7c0c6f6443805dc90,cocoa touch
 5ac8e7e1c0c6f6443805dc91,objective-c
-5ac8e7f7c0c6f6443805dc92,XCTest
+5ac8e7f7c0c6f6443805dc92,xctest
 5ac8e818c0c6f6443805dc93,XCUI
-5ac8e831c0c6f6443805dc94,Andriod Studio
+5ac8e831c0c6f6443805dc94,android studio
 5ac8e86ec0c6f6443805dc95,junit
 5ac8e924c0c6f6443805dc96,akka
 5ac8e92bc0c6f6443805dc97,amazon web services
 5ac8e938c0c6f6443805dc98,etl
 5ac8e97cc0c6f6443805dc99,scoop
 5ac8e99dc0c6f6443805dc9a,hadooq
-5ac8e9adc0c6f6443805dc9b,spark
+5ac8e9adc0c6f6443805dc9b,java spark
 5ac8e9b4c0c6f6443805dc9c,opencv
 5ac8ea8ec0c6f6443805dc9d,caffe
 5ac8ea9cc0c6f6443805dc9e,tensorflow
@@ -193,12 +193,12 @@
 5ac8f4d5c0c6f6443805dce0,yarn
 5ac8f4e0c0c6f6443805dce1,samza
 5ac8f51ac0c6f6443805dce2,cron
-5ac8f581c0c6f6443805dce3,fraud managment
+5ac8f581c0c6f6443805dce3,fraud management
 5ac8f5d3c0c6f6443805dce4,big data
 5ac8f5eec0c6f6443805dce5,wpf
 5ac8f5f9c0c6f6443805dce6,web/db
 5ac8f600c0c6f6443805dce7,wcf
-5ac8f608c0c6f6443805dce8,natural langauge processing
+5ac8f608c0c6f6443805dce8,natural language processing
 5ac8f65ec0c6f6443805dce9,corenlp
 5ac8f66dc0c6f6443805dcea,scikit
 5ac8f679c0c6f6443805dceb,tensorflow
